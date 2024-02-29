@@ -18,6 +18,7 @@ import { IsRegisteredForm } from './components/IsRegisteredForm'
 import { IsNotRegisteredForm } from './components/IsNotRegisteredForm'
 import { EmailForm } from './components/EmailForm';
 import { OtpForm } from './components/OtpForm';
+import { Switch } from '@/components/ui/switch';
 
 // MODELOS
 export interface FormErrors {
@@ -70,11 +71,25 @@ export const Login = () => {
         <>
             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-left">
                 <Card className="w-1/3 min-w-80">
-                    <CardHeader className="space-y-1 gap-6">
-                        <CardTitle className="text-2xl flex items-center justify-normal gap-2">
-                            <img className="w-10" src="https://res.cloudinary.com/de49grmxi/image/upload/v1704653058/logo-tweet-x_nesbfm.png" alt="" />
-                            Log In
-                        </CardTitle>
+
+                    <CardHeader className="space-y-1 gap-6 justify-between flex">
+                        <div className="flex justify-between w-full">
+                            <CardTitle className="justify-between">
+
+                                <div className='text-2xl flex items-center justify-normal gap-2'>
+                                    <img className="w-10" src="https://res.cloudinary.com/de49grmxi/image/upload/v1704653058/logo-tweet-x_nesbfm.png" alt="" />
+                                    <h1>Log In</h1>
+                                </div>
+
+
+                            </CardTitle>
+                            <ModeToggle ></ModeToggle>
+                        </div>
+
+
+
+
+
                         <CardDescription>
                             Enter your email and continue to ExampleInc
                         </CardDescription>
@@ -161,7 +176,6 @@ export const Login = () => {
                     </CardFooter>
                 </Card>
             </div>
-            <ModeToggle />
         </>
     );
 };
