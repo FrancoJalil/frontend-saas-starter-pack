@@ -13,21 +13,31 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { ModeToggle } from '../mode-toggle';
+import { ModeToggle } from '../../components/mode-toggle';
+import { IsRegisteredForm } from './components/IsRegisteredForm'
+import { IsNotRegisteredForm } from './components/IsNotRegisteredForm'
+
+// MODELOS
+export interface FormErrors {
+    email?: string;
+    passwordLogin?: string;
+    confirmPassword?: string;
+}
+
 
 export const Login = () => {
 
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [passwordLogin, setPasswordLogin] = useState<string>('');
+    const [passwordRegister, setPasswordRegister] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [otp, setOtp] = useState<string>('');
     const [otpVerified, setOtpVerified] = useState<boolean | null>(null);
     const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
-    const [errors, setErrors] = useState<{ email?: string, password?: string, confirmPassword?:string}>({});
+    const [errors, setErrors] = useState<FormErrors>({});
     const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
-    
+
 
     const emailRegistered: string = 'x@x.com';
 
@@ -38,18 +48,6 @@ export const Login = () => {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             newErrors.email = 'Email is invalid';
-        }
-
-        setErrors({ ...errors, ...newErrors });
-        return Object.keys(newErrors).length === 0;
-    };
-
-    // se va
-    const validatePassword = (): boolean => {
-        const newErrors: { password?: string } = {};
-
-        if (password !== '123') {
-            newErrors.password = 'Incorrect password';
         }
 
         setErrors({ ...errors, ...newErrors });
@@ -70,43 +68,16 @@ export const Login = () => {
         }
     };
 
-    const handleSubmitPassword = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (validatePassword()) {
-            console.log('Logged in successfully!'); // Muestra el mensaje en la consola si la contraseña es "123"
-        }
-    };
-
     const handleGoBack = () => {
         setIsRegistered(null)
         setShowLoginForm(true); // Cambia showLoginForm a true para volver al formulario de correo electrónico
         setErrors({}); // Limpia los errores al regresar al formulario de correo electrónico
-        setPassword('')
+        setPasswordLogin('')
+        setPasswordRegister('')
         setConfirmPassword('')
     };
 
-    const handleSubmitRegister = (e: React.FormEvent<HTMLFormElement>): boolean => {
-        e.preventDefault()
-        const newErrors: { confirmPassword?: string } = {};
 
-        if (password !== confirmPassword) {
-            console.log("NOT MATCH")
-            newErrors.confirmPassword = 'Passwords do not match'
-        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
-            console.log("mas larga pls")
-            newErrors.confirmPassword = 'Password must be at least 8 characters long and contain at least one letter and one number'
-
-        } else {
-            newErrors.confirmPassword = ''
-            console.log("REGISTRADO")
-
-        }
-
-        setErrors({ ...errors, ...newErrors });
-        return Object.keys(newErrors).length === 0;
-
-    }
 
     return (
         <>
@@ -142,6 +113,7 @@ export const Login = () => {
                                 </span>
                             </div>
                         </div>
+
                         <form className="grid gap-4" onSubmit={handleSubmitEmail} style={{ display: showLoginForm ? 'grid' : 'none' }}>
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -164,62 +136,24 @@ export const Login = () => {
                         </form>
                         {
                             isRegistered === true ?
-                                <form className="grid gap-4" onSubmit={handleSubmitPassword}>
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input
-                                        disabled={isLoading}
-                                        autoCapitalize="none"
-                                        autoComplete="off"
-                                        autoCorrect="off"
-                                        autoFocus={true}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        id="password"
-                                        type="password"
-                                        placeholder="Enter your password"
-                                    />
-                                    {errors.password && <div className="text-red-500 text-xs">{errors.password}</div>}
-                                    <Button disabled={isLoading}>
-                                        {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                                        Log In
-                                    </Button>
-                                    <Button variant="outline" onClick={handleGoBack}>Go Back</Button>
-                                    <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
-                                </form>
+                                <IsRegisteredForm
+                                    passwordLogin={passwordLogin}
+                                    setPasswordLogin={setPasswordLogin}
+                                    isLoading={isLoading}
+                                    setErrors={setErrors}
+                                    errors={errors}
+                                    handleGoBack={handleGoBack}
+                                />
                                 : isRegistered === false ?
-                                    <form className="grid gap-4" onSubmit={handleSubmitRegister}>
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input
-                                            disabled={isLoading}
-                                            autoCapitalize="none"
-                                            autoComplete="off"
-                                            autoCorrect="off"
-                                            autoFocus={true}
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            id="password"
-                                            type="password"
-                                            placeholder="Password"
-                                        />
-                                        <Input
-                                            disabled={isLoading}
-                                            autoCapitalize="none"
-                                            autoComplete="off"
-                                            autoCorrect="off"
-                                            value={confirmPassword}
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                            id="confirmPassword"
-                                            type="password"
-                                            placeholder="Confirm password"
-                                        />
-                                        {errors.confirmPassword && <div className="text-red-500 text-xs">{errors.confirmPassword}</div>}
-                                        <Button disabled={isLoading}>
-                                            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                                            Create account
-                                        </Button>
-                                        <Button variant="outline" onClick={handleGoBack}>Go Back</Button>
-                                        <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
-                                    </form>
+                                    <IsNotRegisteredForm
+                                        passwordRegister={passwordRegister}
+                                        setPasswordRegister={setPasswordRegister}
+                                        confirmPassword={confirmPassword}
+                                        setConfirmPassword={setConfirmPassword}
+                                        errors={errors}
+                                        setErrors={setErrors}
+                                        isLoading={isLoading}
+                                        handleGoBack={handleGoBack} />
                                     : null
                         }
                     </CardContent>

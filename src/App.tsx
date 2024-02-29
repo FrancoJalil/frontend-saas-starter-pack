@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { Button } from "@/components/ui/button"
-import { Login } from './components/routes/Login'
+import { Login } from './pages/Login/Login'
 import { ThemeProvider } from './components/theme-provider'
 
 function App() {
