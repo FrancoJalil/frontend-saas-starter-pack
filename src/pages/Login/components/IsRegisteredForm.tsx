@@ -3,7 +3,7 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormErrors } from '../Login';
+import { BACK_FROM_IS_REGISTERED_FORM, FormErrors } from '../Login';
 
 type Props = {
     passwordLogin: string
@@ -11,7 +11,7 @@ type Props = {
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>;
     errors: FormErrors
     isLoading: boolean
-    handleGoBack: () => void;
+    handleGoBack: any;
 }
 
 export const IsRegisteredForm = ({passwordLogin, setPasswordLogin, setErrors, errors, isLoading, handleGoBack}: Props) => {
@@ -54,11 +54,11 @@ export const IsRegisteredForm = ({passwordLogin, setPasswordLogin, setErrors, er
                 placeholder="Enter your password"
             />
             {errors.passwordLogin && <div className="text-red-500 text-xs">{errors.passwordLogin}</div>}
-            <Button disabled={isLoading}>
+            <Button type="submit" disabled={isLoading}>
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Log In
             </Button>
-            <Button variant="outline" onClick={handleGoBack}>Go Back</Button>
+            <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_REGISTERED_FORM)}>Go Back</Button>
             <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
         </form>
 

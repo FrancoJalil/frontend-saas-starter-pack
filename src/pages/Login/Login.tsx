@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,20 @@ import {
 import { ModeToggle } from '../../components/mode-toggle';
 import { IsRegisteredForm } from './components/IsRegisteredForm'
 import { IsNotRegisteredForm } from './components/IsNotRegisteredForm'
+import { EmailForm } from './components/EmailForm';
+import { OtpForm } from './components/OtpForm';
 
 // MODELOS
 export interface FormErrors {
     email?: string;
     passwordLogin?: string;
     confirmPassword?: string;
+    otp?: string;
 }
+
+export const BACK_FROM_IS_REGISTERED_FORM = "IsRegisteredForm"
+export const BACK_FROM_OTP_FORM = "OtpForm"
+export const BACK_FROM_IS_NOT_REGISTERED_FORM = "IsNotRegisteredForm"
 
 
 export const Login = () => {
@@ -34,50 +41,30 @@ export const Login = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [otp, setOtp] = useState<string>('');
     const [otpVerified, setOtpVerified] = useState<boolean | null>(null);
+    const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null);
     const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
     const [errors, setErrors] = useState<FormErrors>({});
     const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
+    const [showIsNotRegisteredForm, setShowIsNotRegisteredForm] = useState<boolean>(true);
 
+    const handleGoBack = (from: string) => {
 
-    const emailRegistered: string = 'x@x.com';
+        if (from === BACK_FROM_IS_NOT_REGISTERED_FORM) {
+            setPasswordRegister('')
+            setConfirmPassword('')
+            setOtpVerified(null)
+            setShowOtpForm(true)
+        } else if (from === BACK_FROM_OTP_FORM) {
+            setIsRegistered(null)
+            setShowLoginForm(true)
 
-    const validateEmail = (): boolean => {
-        const newErrors: { email?: string } = {};
-
-        if (!email) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            newErrors.email = 'Email is invalid';
+        } else if (from === BACK_FROM_IS_REGISTERED_FORM) {
+            setIsRegistered(null)
+            setPasswordLogin('')
+            setShowLoginForm(true)
         }
-
-        setErrors({ ...errors, ...newErrors });
-        return Object.keys(newErrors).length === 0;
+        setErrors({})
     };
-
-    const handleSubmitEmail = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (validateEmail()) {
-            setIsLoading(true);
-
-            setTimeout(() => {
-                setIsLoading(false);
-                email === emailRegistered ? setIsRegistered(true) : setIsRegistered(false);
-                setShowLoginForm(false);
-            }, 500);
-        }
-    };
-
-    const handleGoBack = () => {
-        setIsRegistered(null)
-        setShowLoginForm(true); // Cambia showLoginForm a true para volver al formulario de correo electrónico
-        setErrors({}); // Limpia los errores al regresar al formulario de correo electrónico
-        setPasswordLogin('')
-        setPasswordRegister('')
-        setConfirmPassword('')
-    };
-
-
 
     return (
         <>
@@ -114,26 +101,19 @@ export const Login = () => {
                             </div>
                         </div>
 
-                        <form className="grid gap-4" onSubmit={handleSubmitEmail} style={{ display: showLoginForm ? 'grid' : 'none' }}>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                disabled={isLoading}
-                                autoCapitalize="none"
-                                autoComplete="email"
-                                autoCorrect="off"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                            />
-                            {errors.email && <div className="text-red-500 text-xs">{errors.email}</div>}
-                            <Button disabled={isLoading}>
-                                {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                                Continue with Email
-                            </Button>
-                            <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
-                        </form>
+                        <EmailForm
+                            showLoginForm={showLoginForm}
+                            setShowLoginForm={setShowLoginForm}
+                            setShowOtpForm={setShowOtpForm}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
+                            email={email}
+                            setEmail={setEmail}
+                            isRegistered={isRegistered}
+                            setIsRegistered={setIsRegistered}
+                            errors={errors}
+                            setErrors={setErrors}
+                        />
                         {
                             isRegistered === true ?
                                 <IsRegisteredForm
@@ -145,16 +125,36 @@ export const Login = () => {
                                     handleGoBack={handleGoBack}
                                 />
                                 : isRegistered === false ?
-                                    <IsNotRegisteredForm
-                                        passwordRegister={passwordRegister}
-                                        setPasswordRegister={setPasswordRegister}
-                                        confirmPassword={confirmPassword}
-                                        setConfirmPassword={setConfirmPassword}
-                                        errors={errors}
+                                    <OtpForm
+                                        showOtpForm={showOtpForm}
+                                        setShowOtpForm={setShowOtpForm}
+                                        setShowIsNotRegisteredForm={setShowIsNotRegisteredForm}
+                                        otpVerified={otpVerified}
+                                        setOtpVerified={setOtpVerified}
                                         setErrors={setErrors}
+                                        errors={errors}
                                         isLoading={isLoading}
+                                        setIsLoading={setIsLoading}
                                         handleGoBack={handleGoBack} />
+
                                     : null
+
+
+                        }
+
+                        {
+                            otpVerified === true ?
+                                <IsNotRegisteredForm
+                                    showIsNotRegisteredForm={showIsNotRegisteredForm}
+                                    passwordRegister={passwordRegister}
+                                    setPasswordRegister={setPasswordRegister}
+                                    confirmPassword={confirmPassword}
+                                    setConfirmPassword={setConfirmPassword}
+                                    errors={errors}
+                                    setErrors={setErrors}
+                                    isLoading={isLoading}
+                                    handleGoBack={handleGoBack} />
+                                : null
                         }
                     </CardContent>
                     <CardFooter className="flex-col text-left items-start">

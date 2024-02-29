@@ -3,8 +3,10 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../Login';
 
 type Props = {
+    showIsNotRegisteredForm: any
     passwordRegister: any
     setPasswordRegister: any
     confirmPassword: any
@@ -15,9 +17,7 @@ type Props = {
     handleGoBack: any
 }
 
-export const IsNotRegisteredForm = ({ passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, handleGoBack }: Props) => {
-
-
+export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, handleGoBack }: Props) => {
 
     const handleSubmitRegister = (e: React.FormEvent<HTMLFormElement>): boolean => {
         e.preventDefault()
@@ -27,7 +27,6 @@ export const IsNotRegisteredForm = ({ passwordRegister, setPasswordRegister, con
             console.log("NOT MATCH")
             newErrors.confirmPassword = 'Passwords do not match'
         } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordRegister)) {
-            console.log("mas larga pls")
             newErrors.confirmPassword = 'Password must be at least 8 characters long and contain at least one letter and one number'
 
         } else {
@@ -42,8 +41,8 @@ export const IsNotRegisteredForm = ({ passwordRegister, setPasswordRegister, con
     }
 
     return (
-        <form className="grid gap-4" onSubmit={handleSubmitRegister}>
-            <Label htmlFor="passwordRegister">Password</Label>
+        <form className="grid gap-4" onSubmit={handleSubmitRegister} style={{ display: showIsNotRegisteredForm ? 'grid' : 'none' }}>
+            <Label htmlFor="passwordRegister">Create your password</Label>
             <Input
                 disabled={isLoading}
                 autoCapitalize="none"
@@ -68,11 +67,11 @@ export const IsNotRegisteredForm = ({ passwordRegister, setPasswordRegister, con
                 placeholder="Confirm password"
             />
             {errors.confirmPassword && <div className="text-red-500 text-xs">{errors.confirmPassword}</div>}
-            <Button disabled={isLoading}>
+            <Button type="submit" disabled={isLoading}>
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Create account
             </Button>
-            <Button variant="outline" onClick={handleGoBack}>Go Back</Button>
+            <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_NOT_REGISTERED_FORM)}>Go Back</Button>
             <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
         </form>
     )
