@@ -50,7 +50,9 @@ export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpFo
 
   return (
     <form className="grid gap-4" onSubmit={handleSubmitOtp} style={{ display: showOtpForm ? 'grid' : 'none' }}>
-      <Label htmlFor="otp">Enter the code we sent to your email</Label>
+      <Label className="flex items-center gap-2 justify-between" htmlFor="otp">Enter the code we sent to your email
+      {errors.otp && <div className="text-red-500 text-xs">*{errors.otp}</div>}
+      </Label>
       <Input
         disabled={isLoading}
         autoCapitalize="none"
@@ -63,7 +65,6 @@ export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpFo
         type="text"
         placeholder="Code"
       />
-      {errors.otp && <div className="text-red-500 text-xs">{errors.otp}</div>}
       <Button type="submit" disabled={isLoading}>
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
         Check Code

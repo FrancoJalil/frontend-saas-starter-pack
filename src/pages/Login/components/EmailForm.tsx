@@ -54,7 +54,11 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
 
     return (
         <form className="grid gap-4" onSubmit={handleSubmitEmail} style={{ display: showLoginForm ? 'grid' : 'none' }}>
-            <Label htmlFor="email">Email</Label>
+            <Label className="flex items-center gap-2 justify-between" htmlFor="email">Email
+            <div className="text-red-500 text-xs" style={{ visibility: errors.email ? 'visible' : 'hidden' }}>
+                *{errors.email ? errors.email : 'mensaje error'}
+            </div>
+            </Label>
             <Input
                 disabled={isLoading}
                 autoCapitalize="none"
@@ -65,12 +69,14 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-            />
-            {errors.email && <div className="text-red-500 text-xs">{errors.email}</div>}
+            /> 
+
+            
             <Button type="submit" disabled={isLoading}>
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Continue with Email
             </Button>
+            
             <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
         </form>
     )

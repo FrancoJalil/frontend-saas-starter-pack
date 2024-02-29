@@ -40,7 +40,6 @@ export const Login = () => {
     const [passwordLogin, setPasswordLogin] = useState<string>('');
     const [passwordRegister, setPasswordRegister] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [otp, setOtp] = useState<string>('');
     const [otpVerified, setOtpVerified] = useState<boolean | null>(null);
     const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null);
     const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
@@ -70,7 +69,7 @@ export const Login = () => {
     return (
         <>
             <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-left">
-                <Card className="w-1/3 min-w-80">
+                <Card className="w-lvw max-w-md min-w-80">
 
                     <CardHeader className="space-y-1 gap-6 justify-between flex">
                         <div className="flex justify-between w-full">
