@@ -4,18 +4,24 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { Button } from "@/components/ui/button"
 import { Login } from './pages/Login/Login'
-import { ThemeProvider } from './components/theme-provider'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Home } from './pages/Home/Home'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <BrowserRouter>
 
-        <Login></Login>
+        <Routes>
 
-      </ThemeProvider>
+          <Route path='/login' element={<Login></Login>} />
+          <Route path='/' element={<Home></Home>} />
+
+
+        </Routes>
+          
+      </BrowserRouter>
     </>
   )
 }

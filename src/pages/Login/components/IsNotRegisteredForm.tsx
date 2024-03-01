@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../Login';
+import { Navigate, useNavigate } from "react-router-dom";
 
 type Props = {
     showIsNotRegisteredForm: any
@@ -19,7 +20,10 @@ type Props = {
 
 export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, handleGoBack }: Props) => {
 
-    const handleSubmitRegister = (e: React.FormEvent<HTMLFormElement>): boolean => {
+
+    const navigate = useNavigate()
+
+    const handleSubmitRegister = (e: React.FormEvent<HTMLFormElement>)  => {
         e.preventDefault()
         const newErrors: { confirmPassword?: string } = {};
 
@@ -31,8 +35,8 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister,
 
         } else {
             newErrors.confirmPassword = ''
-            console.log("REGISTRADO")
-
+            console.log("regis")
+            navigate("/")
         }
 
         setErrors({ ...errors, ...newErrors });
@@ -72,7 +76,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister,
                 Create account
             </Button>
             <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_NOT_REGISTERED_FORM)}>Go Back</Button>
-            <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
+            
         </form>
     )
 }

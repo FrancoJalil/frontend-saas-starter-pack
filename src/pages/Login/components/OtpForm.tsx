@@ -70,7 +70,6 @@ export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpFo
         Check Code
       </Button>
       <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_OTP_FORM)}>Go Back</Button>
-      <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
     </form>
   )
 }
