@@ -133,7 +133,9 @@ export const Login = () => {
                                 <IsRegisteredForm
                                     passwordLogin={passwordLogin}
                                     setPasswordLogin={setPasswordLogin}
+                                    email={email}
                                     isLoading={isLoading}
+                                    setIsLoading={setIsLoading}
                                     setErrors={setErrors}
                                     errors={errors}
                                     handleGoBack={handleGoBack}

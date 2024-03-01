@@ -8,31 +8,64 @@ import { BACK_FROM_IS_REGISTERED_FORM, FormErrors } from '../Login';
 type Props = {
     passwordLogin: string
     setPasswordLogin: React.Dispatch<React.SetStateAction<string>>;
+    email: any
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>;
     errors: FormErrors
     isLoading: boolean
+    setIsLoading: any
     handleGoBack: any;
 }
 
-export const IsRegisteredForm = ({passwordLogin, setPasswordLogin, setErrors, errors, isLoading, handleGoBack}: Props) => {
+export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
     // se va
     const validatePassword = (): boolean => {
-        const newErrors: { password?: string } = {};
+        const newErrors: { passwordLogin?: string } = {};
 
         if (passwordLogin !== '123') {
-            newErrors.password = 'Incorrect password';
+            newErrors.passwordLogin = 'Incorrect password';
         }
 
         setErrors({ ...errors, ...newErrors });
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmitPassword = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+        setErrors({})
+
+        setIsLoading(true)
+
         e.preventDefault();
 
-        if (validatePassword()) {
-            console.log('Logged in successfully!'); // Muestra el mensaje en la consola si la contraseña es "123"
+        if (/*validatePassword()*/ true) {
+            try {
+                const response = await fetch('http://localhost:8000/user/token/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: passwordLogin
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Invalid response');
+                }
+    
+                const data = await response.json();
+                console.log(data.access);
+                console.log(data.refresh);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                const newErrors: FormErrors = { passwordLogin: 'Incorrect password' };
+                setErrors({ ...errors, ...newErrors });
+            } finally {
+                setIsLoading(false)
+            }
+
         }
     };
 
