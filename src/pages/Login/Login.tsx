@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,6 @@ import { IsRegisteredForm } from './components/IsRegisteredForm'
 import { IsNotRegisteredForm } from './components/IsNotRegisteredForm'
 import { EmailForm } from './components/EmailForm';
 import { OtpForm } from './components/OtpForm';
-import { Switch } from '@/components/ui/switch';
 
 // MODELOS
 export interface FormErrors {
@@ -34,6 +33,7 @@ export const BACK_FROM_IS_NOT_REGISTERED_FORM = "IsNotRegisteredForm"
 
 
 export const Login = () => {
+
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
@@ -142,6 +142,7 @@ export const Login = () => {
                                 />
                                 : isRegistered === false ?
                                     <OtpForm
+                                        email={email}
                                         showOtpForm={showOtpForm}
                                         setShowOtpForm={setShowOtpForm}
                                         setShowIsNotRegisteredForm={setShowIsNotRegisteredForm}
@@ -161,6 +162,7 @@ export const Login = () => {
                         {
                             otpVerified === true ?
                                 <IsNotRegisteredForm
+                                    email={email}
                                     showIsNotRegisteredForm={showIsNotRegisteredForm}
                                     passwordRegister={passwordRegister}
                                     setPasswordRegister={setPasswordRegister}
@@ -169,6 +171,7 @@ export const Login = () => {
                                     errors={errors}
                                     setErrors={setErrors}
                                     isLoading={isLoading}
+                                    setIsLoading={setIsLoading}
                                     handleGoBack={handleGoBack} />
                                 : null
                         }

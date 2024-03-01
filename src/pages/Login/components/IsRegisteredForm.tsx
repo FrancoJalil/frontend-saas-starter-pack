@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_REGISTERED_FORM, FormErrors } from '../Login';
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from '@/contexts/AuthContext';
 
 type Props = {
     passwordLogin: string
@@ -18,6 +20,8 @@ type Props = {
 
 export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
+    const navigate = useNavigate()
+
     // se va
     const validatePassword = (): boolean => {
         const newErrors: { passwordLogin?: string } = {};
@@ -29,6 +33,8 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
         setErrors({ ...errors, ...newErrors });
         return Object.keys(newErrors).length === 0;
     };
+
+    let {loginUser} = useContext(AuthContext)    
 
     const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         setErrors({})
@@ -57,6 +63,11 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
                 const data = await response.json();
                 console.log(data.access);
                 console.log(data.refresh);
+                // save tokens
+                
+                // redirect to /
+                navigate("/")
+
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -72,7 +83,7 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
     return (
 
 
-        <form className="grid gap-4" onSubmit={handleSubmitPassword}>
+        <form className="grid gap-4" onSubmit={(e) => loginUser(e, email, passwordLogin, setIsLoading, setErrors, errors)}>
             <Label htmlFor="password">Password</Label>
             <Input
                 disabled={isLoading}

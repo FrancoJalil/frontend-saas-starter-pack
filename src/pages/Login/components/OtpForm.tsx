@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { FormErrors, BACK_FROM_OTP_FORM } from '../Login';
 
 type Props = {
+  email: any
   showOtpForm: any
   setShowOtpForm: any
   setShowIsNotRegisteredForm: any
@@ -19,29 +20,59 @@ type Props = {
   handleGoBack: any;
 }
 
-export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const OtpForm = ({ otpVerified, setOtpVerified, email, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
   const otpTest: string = "321"
 
   const [otp, setOtp] = useState<string>('')
 
-  const handleSubmitOtp = (e: React.FormEvent<HTMLFormElement>): boolean => {
+  const handleSubmitOtp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsLoading(true)
     const newErrors: { otp?: string } = {};
 
-    if (otp !== otpTest) {
-      newErrors.otp = 'Invalid OTP'
-    } else {
-      newErrors.otp = ''
-      setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:8000/user/check-code/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          otp: otp
+        }),
+      });
 
-      setTimeout(() => {
-        setIsLoading(false);
-        setOtpVerified(true);
-        setShowOtpForm(false);
-        setShowIsNotRegisteredForm(true);
-      }, 500);
+      const data = await response.json()
+      setOtp(otp.trim())
+      if (!response.ok) {
+        newErrors.otp = 'Error'
+        throw new Error('Invalid response');
+      }
+
+      if (!data.checked) {
+        newErrors.otp = 'Invalid OTP'
+        throw new Error('Invalid otp');
+
+      }
+
+      console.log(data)
+      console.log(data.checked)
+
+
+      setIsLoading(false);
+      setOtpVerified(true);
+      setShowOtpForm(false);
+      setShowIsNotRegisteredForm(true);
+
+
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false)
     }
+
+
 
     setErrors({ ...errors, ...newErrors });
     return Object.keys(newErrors).length === 0;
@@ -51,7 +82,7 @@ export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpFo
   return (
     <form className="grid gap-4" onSubmit={handleSubmitOtp} style={{ display: showOtpForm ? 'grid' : 'none' }}>
       <Label className="flex items-center gap-2 justify-between" htmlFor="otp">Enter the code we sent to your email
-      {errors.otp && <div className="text-red-500 text-xs">*{errors.otp}</div>}
+        {errors.otp && <div className="text-red-500 text-xs">*{errors.otp}</div>}
       </Label>
       <Input
         disabled={isLoading}
@@ -62,7 +93,7 @@ export const OtpForm = ({ otpVerified, setOtpVerified, showOtpForm, setShowOtpFo
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
         id="otp"
-        type="text"
+        type="number"
         placeholder="Code"
       />
       <Button type="submit" disabled={isLoading}>

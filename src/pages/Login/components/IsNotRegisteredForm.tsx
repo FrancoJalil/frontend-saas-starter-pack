@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../Login';
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
+    email: any
     showIsNotRegisteredForm: any
     passwordRegister: any
     setPasswordRegister: any
@@ -15,15 +16,16 @@ type Props = {
     errors: any
     setErrors: any
     isLoading: any
+    setIsLoading: any
     handleGoBack: any
 }
 
-export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, handleGoBack }: Props) => {
+export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
 
     const navigate = useNavigate()
 
-    const handleSubmitRegister = (e: React.FormEvent<HTMLFormElement>)  => {
+    const handleSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newErrors: { confirmPassword?: string } = {};
 
@@ -35,8 +37,40 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister,
 
         } else {
             newErrors.confirmPassword = ''
-            console.log("regis")
-            navigate("/")
+            console.log("registered")
+
+            try {
+                const response = await fetch('http://localhost:8000/user/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: passwordRegister
+                    }),
+                });
+
+                const data = await response.json()
+                if (!response.ok) {
+                    newErrors.confirmPassword = 'Error'
+                    throw new Error('Invalid response');
+                }
+
+                console.log(data)
+                // guardar en localstorage
+                console.log(data.access)
+                console.log(data.refresh)
+                navigate("/")
+
+
+
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setIsLoading(false)
+            }
+
         }
 
         setErrors({ ...errors, ...newErrors });
@@ -76,7 +110,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, passwordRegister,
                 Create account
             </Button>
             <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_NOT_REGISTERED_FORM)}>Go Back</Button>
-            
+
         </form>
     )
 }
