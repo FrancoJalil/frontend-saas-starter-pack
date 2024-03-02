@@ -20,6 +20,10 @@ type Props = {
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
 }
 
+type responseFetchIsMailChecked = {
+    email: boolean
+}
+
 export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isLoading, setIsLoading, email, setEmail, setIsRegistered, errors, setErrors }: Props) => {
 
     const validateEmail = (): boolean => {
@@ -54,14 +58,11 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                     body: JSON.stringify({ email }),
                 });
 
-                const data = await response.json();
+                const data: responseFetchIsMailChecked = await response.json();
                 const userExists: boolean = data.email
-                console.log(userExists)
-                console.log("paso")
 
                 if (userExists === undefined) {
                     newErrors.email = 'Email is invalid'
-                    console.log("hola")
                     setIsLoading(false);
                     setErrors({ ...errors, ...newErrors });
                     return Object.keys(newErrors).length === 0;

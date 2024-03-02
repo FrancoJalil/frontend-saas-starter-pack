@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
-import { FormErrors } from '../pages/Login/Login'
+import { FormErrors } from '../pages/Login/models/forms'
 
 type AuthContextType = {
   user: any
@@ -15,21 +15,12 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null | any>(null)
 
 type Props = {
-  children: any
+  children: React.ReactNode
 }
 
-type authTokensType = {
-  access: string
-  refresh: string
-}
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }: Props) => {
-
-
+export const AuthProvider = ({ children }: Props) => {
 
   const navigate = useNavigate()
-
-  const storedAuthTokens = localStorage.getItem("authTokens");
 
   const [authTokens, setAuthTokens] = useState(() => {
     try {
@@ -41,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       navigate('/login')
     }
   });
-  
+
   const [user, setUser] = useState(() => {
     try {
       const storedTokens = localStorage.getItem("authTokens");
@@ -80,12 +71,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         navigate("/")
 
       } else {
-        alert('wrong')
+
+        throw new Error('Invalid response');
       }
     } catch (err) {
-      alert('wrong')
-      const newErrors: FormErrors = { passwordLogin: 'Incorrect password' };
+      const newErrors: { passwordLogin?: string } = {};
+      newErrors.passwordLogin = 'Invalid password'
+
       setErrors({ ...errors, ...newErrors });
+      return Object.keys(newErrors).length === 0;
     } finally {
       setIsLoading(false)
     }

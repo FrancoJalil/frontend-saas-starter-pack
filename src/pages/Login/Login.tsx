@@ -28,7 +28,6 @@ import { HandleGoBackFunction } from './models/functions'
 
 export const Login = () => {
 
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
     const [passwordLogin, setPasswordLogin] = useState<string>('');
