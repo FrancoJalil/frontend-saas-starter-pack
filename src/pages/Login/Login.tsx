@@ -33,6 +33,7 @@ export const Login = () => {
     const [passwordLogin, setPasswordLogin] = useState<string>('');
     const [passwordRegister, setPasswordRegister] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [otp, setOtp] = useState<string>('')
     const [otpVerified, setOtpVerified] = useState<boolean | null>(null);
     const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null);
     const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
@@ -135,6 +136,8 @@ export const Login = () => {
                                 />
                                 : isRegistered === false ?
                                     <OtpForm
+                                        otp={otp}
+                                        setOtp={setOtp}
                                         email={email}
                                         showOtpForm={showOtpForm}
                                         setShowOtpForm={setShowOtpForm}
@@ -155,6 +158,7 @@ export const Login = () => {
                             otpVerified === true ?
                                 <IsNotRegisteredForm
                                     email={email}
+                                    otp={otp}
                                     showIsNotRegisteredForm={showIsNotRegisteredForm}
                                     passwordRegister={passwordRegister}
                                     setPasswordRegister={setPasswordRegister}

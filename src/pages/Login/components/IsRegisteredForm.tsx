@@ -45,7 +45,7 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Log In
             </Button>
-            <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_REGISTERED_FORM)}>Go Back</Button>
+            <Button disabled={isLoading} type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_REGISTERED_FORM)}>Go Back</Button>
             <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
         </form>
 

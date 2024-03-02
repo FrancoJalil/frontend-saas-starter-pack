@@ -121,7 +121,9 @@ export const AuthProvider = ({ children }: Props) => {
 
   let contextData = {
     user: user,
+    setUser: setUser,
     authTokens: authTokens,
+    setAuthTokens,
     loginUser: loginUser,
     logoutUser: logoutUser
   }

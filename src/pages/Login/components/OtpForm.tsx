@@ -10,6 +10,8 @@ import { BACK_FROM_OTP_FORM } from '../utils/variables'
 import { urlBase } from "@/utils/variables"
 
 type Props = {
+  otp: any
+  setOtp: any
   email: string
   showOtpForm: boolean | null
   setShowOtpForm: React.Dispatch<React.SetStateAction<boolean | null>>
@@ -22,9 +24,8 @@ type Props = {
   handleGoBack: HandleGoBackFunction
 }
 
-export const OtpForm = ({ setOtpVerified, email, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const OtpForm = ({ otp, setOtp, setOtpVerified, email, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
-  const [otp, setOtp] = useState<string>('')
 
   const handleSubmitOtp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -95,7 +96,7 @@ export const OtpForm = ({ setOtpVerified, email, showOtpForm, setShowOtpForm, se
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
         Check Code
       </Button>
-      <Button type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_OTP_FORM)}>Go Back</Button>
+      <Button disabled={isLoading} type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_OTP_FORM)}>Go Back</Button>
     </form>
   )
 }
