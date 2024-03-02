@@ -8,6 +8,8 @@ export const Home = () => {
 
     let { user, logoutUser } = useContext(AuthContext)
 
+    console.log(user)
+
     const { data, isLoading, errors } = useFetch(urlBase+'/user/protected-view/', 'GET', true)
 
     return (

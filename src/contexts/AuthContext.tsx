@@ -3,14 +3,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
-import { FormErrors } from '../pages/Login/models/forms'
-
-type AuthContextType = {
-  user: any
-  authTokens: any
-  loginUser: any
-  logoutUser: any
-};
+import { AuthContextType } from "@/models/context"
 
 export const AuthContext = createContext<AuthContextType | null | any>(null)
 
