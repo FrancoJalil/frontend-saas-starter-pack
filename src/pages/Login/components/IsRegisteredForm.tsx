@@ -3,83 +3,25 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BACK_FROM_IS_REGISTERED_FORM, FormErrors } from '../Login';
-import { useNavigate } from "react-router-dom";
+import { FormErrors } from '../models/forms';
+import { HandleGoBackFunction } from '../models/functions';
+import { BACK_FROM_IS_REGISTERED_FORM } from '../utils/variables'
 import { AuthContext } from '@/contexts/AuthContext';
-import { urlBase } from "@/utils/variables"
 
 type Props = {
     passwordLogin: string
-    setPasswordLogin: React.Dispatch<React.SetStateAction<string>>;
+    setPasswordLogin: React.Dispatch<React.SetStateAction<string>>
     email: any
-    setErrors: React.Dispatch<React.SetStateAction<FormErrors>>;
+    setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
     errors: FormErrors
     isLoading: boolean
-    setIsLoading: any
-    handleGoBack: any;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    handleGoBack: HandleGoBackFunction
 }
 
 export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
-    const navigate = useNavigate()
-
-    // se va
-    const validatePassword = (): boolean => {
-        const newErrors: { passwordLogin?: string } = {};
-
-        if (passwordLogin !== '123') {
-            newErrors.passwordLogin = 'Incorrect password';
-        }
-
-        setErrors({ ...errors, ...newErrors });
-        return Object.keys(newErrors).length === 0;
-    };
-
-    let {loginUser} = useContext(AuthContext)    
-
-    const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-        setErrors({})
-
-        setIsLoading(true)
-
-        e.preventDefault();
-
-        if (/*validatePassword()*/ true) {
-            try {
-                const response = await fetch(urlBase+'/user/token/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: passwordLogin
-                    }),
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Invalid response');
-                }
-    
-                const data = await response.json();
-                console.log(data.access);
-                console.log(data.refresh);
-                // save tokens
-                
-                // redirect to /
-                navigate("/")
-
-                
-            } catch (error) {
-                console.error('Error:', error);
-                const newErrors: FormErrors = { passwordLogin: 'Incorrect password' };
-                setErrors({ ...errors, ...newErrors });
-            } finally {
-                setIsLoading(false)
-            }
-
-        }
-    };
+    let {loginUser} = useContext(AuthContext)
 
     return (
 

@@ -5,22 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { urlBase } from "@/utils/variables"
+import { FormErrors } from "../models/forms"
 
 type Props = {
-    showLoginForm: any
-    setShowLoginForm: any
-    setShowOtpForm: any
-    isLoading: any
-    setIsLoading: any
-    isRegistered: any
-    setIsRegistered: any
-    email: any
-    setEmail: any
-    errors: any
-    setErrors: any
+    showLoginForm: boolean
+    setShowLoginForm: React.Dispatch<React.SetStateAction<boolean>>
+    setShowOtpForm: React.Dispatch<React.SetStateAction<boolean | null>>
+    isLoading: boolean
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    setIsRegistered: React.Dispatch<React.SetStateAction<boolean | null>>
+    email: string
+    setEmail: React.Dispatch<React.SetStateAction<string>>
+    errors: FormErrors
+    setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
 }
 
-export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isLoading, setIsLoading, email, setEmail, isRegistered, setIsRegistered, errors, setErrors }: Props) => {
+export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isLoading, setIsLoading, email, setEmail, setIsRegistered, errors, setErrors }: Props) => {
 
     const validateEmail = (): boolean => {
         const newErrors: { email?: string } = {};

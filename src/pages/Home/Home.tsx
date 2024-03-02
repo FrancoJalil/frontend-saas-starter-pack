@@ -1,7 +1,6 @@
 import { AuthContext } from '../../contexts/AuthContext'
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigate } from "react-router-dom"
 import { useFetch } from "../../hooks/useFetch"
 import { urlBase } from "@/utils/variables"
 
@@ -42,4 +41,6 @@ export const Home = () => {
 
     )
 }
+
+
 

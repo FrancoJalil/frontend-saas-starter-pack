@@ -1,24 +1,26 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../Login';
+import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../utils/variables';
 import { useNavigate } from "react-router-dom";
 import { urlBase } from "@/utils/variables"
+import { FormErrors } from "../models/forms"
+import { HandleGoBackFunction } from "../models/functions"
 
 type Props = {
-    email: any
-    showIsNotRegisteredForm: any
-    passwordRegister: any
-    setPasswordRegister: any
-    confirmPassword: any
-    setConfirmPassword: any
-    errors: any
-    setErrors: any
-    isLoading: any
-    setIsLoading: any
-    handleGoBack: any
+    email: string
+    showIsNotRegisteredForm: boolean
+    passwordRegister: string
+    setPasswordRegister: React.Dispatch<React.SetStateAction<string>>
+    confirmPassword: string
+    setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
+    errors: FormErrors
+    setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
+    isLoading: boolean
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    handleGoBack: HandleGoBackFunction
 }
 
 export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
@@ -31,14 +33,12 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, passwordRe
         const newErrors: { confirmPassword?: string } = {};
 
         if (passwordRegister !== confirmPassword) {
-            console.log("NOT MATCH")
             newErrors.confirmPassword = 'Passwords do not match'
         } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordRegister)) {
             newErrors.confirmPassword = 'Password must be at least 8 characters long and contain at least one letter and one number'
 
         } else {
             newErrors.confirmPassword = ''
-            console.log("registered")
 
             try {
                 const response = await fetch(urlBase+'/user/register/', {
@@ -51,17 +51,14 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, passwordRe
                         password: passwordRegister
                     }),
                 });
-
-                const data = await response.json()
+                
                 if (!response.ok) {
                     newErrors.confirmPassword = 'Error'
                     throw new Error('Invalid response');
                 }
 
-                console.log(data)
-                // guardar en localstorage
-                console.log(data.access)
-                console.log(data.refresh)
+                const data = await response.json()
+                localStorage.setItem('authTokens', JSON.stringify(data))
                 navigate("/")
 
 

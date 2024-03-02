@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+    BACK_FROM_IS_NOT_REGISTERED_FORM,
+    BACK_FROM_OTP_FORM,
+    BACK_FROM_IS_REGISTERED_FORM
+} from './utils/variables'
 
 import {
     Card,
@@ -18,18 +21,9 @@ import { IsRegisteredForm } from './components/IsRegisteredForm'
 import { IsNotRegisteredForm } from './components/IsNotRegisteredForm'
 import { EmailForm } from './components/EmailForm';
 import { OtpForm } from './components/OtpForm';
+import { FormErrors } from './models/forms'
+import { HandleGoBackFunction } from './models/functions'
 
-// MODELOS
-export interface FormErrors {
-    email?: string;
-    passwordLogin?: string;
-    confirmPassword?: string;
-    otp?: string;
-}
-
-export const BACK_FROM_IS_REGISTERED_FORM = "IsRegisteredForm"
-export const BACK_FROM_OTP_FORM = "OtpForm"
-export const BACK_FROM_IS_NOT_REGISTERED_FORM = "IsNotRegisteredForm"
 
 
 export const Login = () => {
@@ -47,7 +41,8 @@ export const Login = () => {
     const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
     const [showIsNotRegisteredForm, setShowIsNotRegisteredForm] = useState<boolean>(true);
 
-    const handleGoBack = (from: string) => {
+
+    const handleGoBack: HandleGoBackFunction = (from) => {
 
         if (from === BACK_FROM_IS_NOT_REGISTERED_FORM) {
             setPasswordRegister('')
@@ -123,7 +118,6 @@ export const Login = () => {
                             setIsLoading={setIsLoading}
                             email={email}
                             setEmail={setEmail}
-                            isRegistered={isRegistered}
                             setIsRegistered={setIsRegistered}
                             errors={errors}
                             setErrors={setErrors}
@@ -146,7 +140,6 @@ export const Login = () => {
                                         showOtpForm={showOtpForm}
                                         setShowOtpForm={setShowOtpForm}
                                         setShowIsNotRegisteredForm={setShowIsNotRegisteredForm}
-                                        otpVerified={otpVerified}
                                         setOtpVerified={setOtpVerified}
                                         setErrors={setErrors}
                                         errors={errors}

@@ -4,26 +4,25 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormErrors, BACK_FROM_OTP_FORM } from '../Login';
+import { FormErrors } from "../models/forms"
+import { HandleGoBackFunction } from '../models/functions';
+import { BACK_FROM_OTP_FORM } from '../utils/variables'
 import { urlBase } from "@/utils/variables"
 
 type Props = {
-  email: any
-  showOtpForm: any
-  setShowOtpForm: any
-  setShowIsNotRegisteredForm: any
-  otpVerified: any
-  setOtpVerified: any
-  setErrors: React.Dispatch<React.SetStateAction<FormErrors>>;
+  email: string
+  showOtpForm: boolean | null
+  setShowOtpForm: React.Dispatch<React.SetStateAction<boolean | null>>
+  setShowIsNotRegisteredForm: React.Dispatch<React.SetStateAction<boolean>>
+  setOtpVerified: React.Dispatch<React.SetStateAction<boolean | null>>
+  setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
   errors: FormErrors
   isLoading: boolean
-  setIsLoading: any
-  handleGoBack: any;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  handleGoBack: HandleGoBackFunction
 }
 
-export const OtpForm = ({ otpVerified, setOtpVerified, email, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
-
-  const otpTest: string = "321"
+export const OtpForm = ({ setOtpVerified, email, showOtpForm, setShowOtpForm, setShowIsNotRegisteredForm, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
   const [otp, setOtp] = useState<string>('')
 
@@ -57,9 +56,6 @@ export const OtpForm = ({ otpVerified, setOtpVerified, email, showOtpForm, setSh
 
       }
 
-      console.log(data)
-      console.log(data.checked)
-
 
       setIsLoading(false);
       setOtpVerified(true);
@@ -72,8 +68,6 @@ export const OtpForm = ({ otpVerified, setOtpVerified, email, showOtpForm, setSh
     } finally {
       setIsLoading(false)
     }
-
-
 
     setErrors({ ...errors, ...newErrors });
     return Object.keys(newErrors).length === 0;
