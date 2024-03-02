@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../Login';
 import { useNavigate } from "react-router-dom";
+import { urlBase } from "@/utils/variables"
 
 type Props = {
     email: any
@@ -40,7 +41,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, passwordRe
             console.log("registered")
 
             try {
-                const response = await fetch('http://localhost:8000/user/register/', {
+                const response = await fetch(urlBase+'/user/register/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

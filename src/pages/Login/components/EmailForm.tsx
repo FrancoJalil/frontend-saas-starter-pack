@@ -4,6 +4,7 @@ import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { urlBase } from "@/utils/variables"
 
 type Props = {
     showLoginForm: any
@@ -34,61 +35,55 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
         return Object.keys(newErrors).length === 0;
     };
 
-    const emailRegistered: string = 'francocraftero78@gmail.com';
-
-
-    const handleSubmitEmail = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitEmail = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (validateEmail()) {
             setIsLoading(true);
 
-            setTimeout(async () => {
-                const newErrors: { email?: string } = {};
-                setErrors({ ...errors, ...newErrors });
+            const newErrors: { email?: string } = {};
+            setErrors({ ...errors, ...newErrors });
 
 
-                try {
-                    const response = await fetch('http://localhost:8000/user/check-email/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ email }),
-                    });
+            try {
+                const response = await fetch(urlBase+'/user/check-email/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                });
 
-                    const data = await response.json();
-                    const userExists: boolean = data.email
-                    console.log(userExists)
-                    console.log("paso")
+                const data = await response.json();
+                const userExists: boolean = data.email
+                console.log(userExists)
+                console.log("paso")
 
-                    if (userExists === undefined) {
-                        newErrors.email = 'Email is invalid'
-                        console.log("hola")
-                        setIsLoading(false);
-                        setErrors({ ...errors, ...newErrors });
-                        return Object.keys(newErrors).length === 0;
+                if (userExists === undefined) {
+                    newErrors.email = 'Email is invalid'
+                    console.log("hola")
+                    setIsLoading(false);
+                    setErrors({ ...errors, ...newErrors });
+                    return Object.keys(newErrors).length === 0;
 
-                    } else {
-                        userExists ? setIsRegistered(true) : setIsRegistered(false);
-                        setShowLoginForm(false);
-                        setShowOtpForm(true);
+                } else {
+                    userExists ? setIsRegistered(true) : setIsRegistered(false);
+                    setShowLoginForm(false);
+                    setShowOtpForm(true);
 
-                        setIsLoading(false);
-                        email === emailRegistered ? setIsRegistered(true) : setIsRegistered(false);
-                        setShowLoginForm(false);
-                        setShowOtpForm(true);
-                        console.log("ciao")
-                    }
-
-
-
-                } catch (error) {
-                    console.error('Error al enviar el correo electrónico:', error);
-
+                    setIsLoading(false);
+                    setShowLoginForm(false);
+                    setShowOtpForm(true);
+                    console.log("ciao")
                 }
 
-            }, 500);
+
+
+            } catch (error) {
+                console.error('Error al enviar el correo electrónico:', error);
+
+            }
+
         }
     };
 

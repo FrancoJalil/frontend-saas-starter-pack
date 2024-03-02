@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_REGISTERED_FORM, FormErrors } from '../Login';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from '@/contexts/AuthContext';
+import { urlBase } from "@/utils/variables"
 
 type Props = {
     passwordLogin: string
@@ -45,7 +46,7 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
 
         if (/*validatePassword()*/ true) {
             try {
-                const response = await fetch('http://localhost:8000/user/token/', {
+                const response = await fetch(urlBase+'/user/token/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

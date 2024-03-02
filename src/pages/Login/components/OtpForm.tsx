@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormErrors, BACK_FROM_OTP_FORM } from '../Login';
+import { urlBase } from "@/utils/variables"
 
 type Props = {
   email: any
@@ -32,7 +33,7 @@ export const OtpForm = ({ otpVerified, setOtpVerified, email, showOtpForm, setSh
     const newErrors: { otp?: string } = {};
 
     try {
-      const response = await fetch('http://localhost:8000/user/check-code/', {
+      const response = await fetch(urlBase+'/user/check-code/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

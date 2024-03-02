@@ -2,52 +2,14 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigate } from "react-router-dom"
-
-type Props = {}
-
-type ResponseType = {
-    email: any
-    tokens: any
-}
+import { useFetch } from "../../hooks/useFetch"
+import { urlBase } from "@/utils/variables"
 
 export const Home = () => {
 
-    let { user, logoutUser, authTokens } = useContext(AuthContext)
+    let { user, logoutUser } = useContext(AuthContext)
 
-    const [info, setInfo] = useState<ResponseType>()
-
-    useEffect(() => {
-        getInfo()
-        console.log(info)
-    }, [])
-
-    const getInfo = async () => {
-        try {
-            let response = await fetch('http://localhost:8000/user/protected-view/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + String(authTokens.access)
-                }
-            })
-
-            const data = await response.json()
-            console.log(data)
-
-            if (response.status === 200) {
-                setInfo(data)
-                console.log(info)
-
-            } else if (response.status === 401) {
-                logoutUser()
-            } else {
-                throw new Error('Invalid response');
-            }
-        } catch (err) {
-            console.error(err)
-        } finally {
-        }
-    }
+    const { data, isLoading, errors } = useFetch(urlBase+'/user/protected-view/', 'GET', true)
 
     return (
         <>
@@ -61,12 +23,20 @@ export const Home = () => {
             )
             }
 
+            {
+                isLoading ?
+                    <h4>Cargando...</h4>
+                    :
+                    <>
+                        <p>Hello {data?.email}!</p>
+                        <p>Your tokens: {data?.tokens}!</p>
+                    </>
 
-            <>
-                <p>Hello {info?.email}!</p>
-                <p>Your tokens: {info?.tokens}!</p>
-            </>
+            }
 
+            {
+                errors ? <p>Hubo un error al pedir la información.</p> : null
+            }
 
         </>
 

@@ -18,15 +18,42 @@ type Props = {
   children: any
 }
 
-
+type authTokensType = {
+  access: string
+  refresh: string
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }: Props) => {
 
-  const tokkk = localStorage.getItem('authTokens')
+
 
   const navigate = useNavigate()
-  let [authTokens, setAuthTokens] = useState(() => tokkk ? JSON.parse(tokkk) : null)
-  let [user, setUser] = useState(() => tokkk ? jwtDecode(tokkk) : null)
+
+  const storedAuthTokens = localStorage.getItem("authTokens");
+
+  const [authTokens, setAuthTokens] = useState(() => {
+    try {
+      const storedTokens = localStorage.getItem("authTokens");
+      return storedTokens ? JSON.parse(storedTokens) : null;
+    } catch (error) {
+      console.error("Error parsing auth tokens from localStorage:", error);
+      localStorage.removeItem('authTokens')
+      navigate('/login')
+    }
+  });
+  
+  const [user, setUser] = useState(() => {
+    try {
+      const storedTokens = localStorage.getItem("authTokens");
+      return storedTokens ? jwtDecode(storedTokens) : null;
+    } catch (error) {
+      console.error("Error decoding user from auth tokens:", error);
+      setAuthTokens(null)
+      localStorage.removeItem('authTokens')
+      navigate('/login')
+    }
+  });
+
   let [loadingWebsite, setIsLoadingWebsite] = useState(true)
 
   let loginUser = async (e: React.FormEvent<HTMLFormElement>, email: string, password: string, setIsLoading: any, setErrors: any, errors: any) => {
@@ -130,7 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={contextData} >
-      { loadingWebsite ? null : children}
+      {loadingWebsite ? null : children}
     </AuthContext.Provider>
   )
 }
