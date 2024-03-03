@@ -24,8 +24,6 @@ export const BuyTokens = (props: Props) => {
     const [sliderValue, setSliderValue] = useState<number>(defaultValue)
 
     async function createOrder() {
-        console.log("hola")
-        console.log(sliderValue)
 
         return await fetch(urlBase + "/paypal/create-custom-order/", {
             method: "POST",
@@ -68,7 +66,6 @@ export const BuyTokens = (props: Props) => {
     }
 
     const handleSliderValueChange = (value: number) => {
-        //console.log(value)
         setSliderValue(value)
     }
 
@@ -93,7 +90,7 @@ export const BuyTokens = (props: Props) => {
                 Tokens to buy: {sliderValue}
                 <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} max={100} step={1} className="w-48" />
 
-                <div style={{ opacity: isSliderChange ? '0' : '1' }}>
+                <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
                     <PayPalButtons
                         disabled={isSliderChange}
                         key={paypalButtonsKey}
@@ -102,6 +99,7 @@ export const BuyTokens = (props: Props) => {
                         onApprove={onApprove}
                     />
                 </div>
+                
             </PayPalScriptProvider>
         </div>
 
