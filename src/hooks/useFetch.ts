@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from '../contexts/AuthContext'
+import { AuthContextType } from "@/models/context"
 
 type responseFetch = {
     data: any
@@ -9,7 +10,7 @@ type responseFetch = {
 
 export const useFetch = (url: string, method: string, tokenRequired: boolean) => {
 
-    let { authTokens, logoutUser } = useContext(AuthContext)
+    let { authTokens, logoutUser } = useContext(AuthContext) as AuthContextType
 
     const [state, setState] = useState<responseFetch>({
         data: null,
