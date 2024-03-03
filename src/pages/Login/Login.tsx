@@ -23,6 +23,7 @@ import { EmailForm } from './components/EmailForm';
 import { OtpForm } from './components/OtpForm';
 import { FormErrors } from './models/forms'
 import { HandleGoBackFunction } from './models/functions'
+import { AuthContextType } from "@/models/context"
 
 import { CodeResponse, useGoogleOneTapLogin, GoogleLogin, TokenResponse, useGoogleLogin, CredentialResponse } from '@react-oauth/google';
 
@@ -42,7 +43,7 @@ interface credentialResponseType {
 
 export const Login = () => {
 
-    let { logInWithTokens } = useContext(AuthContext)
+    let { logInWithTokens } = useContext(AuthContext) as AuthContextType
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -159,9 +160,9 @@ export const Login = () => {
 
 
                         <CardDescription>
-                            {isRegistered === true ? `Hi again ${email}` 
-                            : isRegistered === false ? `Welcome ${email}` 
-                        : 'Enter your email and continue to ExampleInc'}
+                            {isRegistered === true ? `Hi again ${email}`
+                                : isRegistered === false ? `Welcome ${email}`
+                                    : 'Enter your email and continue to ExampleInc'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4">
