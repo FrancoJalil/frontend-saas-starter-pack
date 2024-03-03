@@ -15,9 +15,10 @@ export type authTokens = {
 }
 
 export interface AuthContextType {
-    user: userJWT
-    authTokens: authTokens
+    user: userJWT | null
+    authTokens: authTokens | null
     loginUser: Function
     logoutUser: Function
+    logInWithTokens: Function
 }
 

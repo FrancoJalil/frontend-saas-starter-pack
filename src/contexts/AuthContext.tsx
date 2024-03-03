@@ -3,9 +3,11 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
-import { AuthContextType } from "@/models/context"
+import { AuthContextType, userJWT, authTokens } from "@/models/context"
+import { FormErrors } from "@/pages/Login/models/forms"
 
-export const AuthContext = createContext<AuthContextType | null | any>(null)
+
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 type Props = {
   children: React.ReactNode
@@ -15,7 +17,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const navigate = useNavigate()
 
-  const [authTokens, setAuthTokens] = useState(() => {
+  const [authTokens, setAuthTokens] = useState<authTokens | null>(() => {
     try {
       const storedTokens = localStorage.getItem("authTokens");
       return storedTokens ? JSON.parse(storedTokens) : null;
@@ -26,21 +28,22 @@ export const AuthProvider = ({ children }: Props) => {
     }
   });
 
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState<userJWT | null>(() => {
     try {
       const storedTokens = localStorage.getItem("authTokens");
       return storedTokens ? jwtDecode(storedTokens) : null;
     } catch (error) {
       console.error("Error decoding user from auth tokens:", error);
-      setAuthTokens(null)
-      localStorage.removeItem('authTokens')
-      navigate('/login')
+      setAuthTokens(null);
+      localStorage.removeItem('authTokens');
+      navigate('/login');
+      return null;
     }
   });
 
   let [loadingWebsite, setIsLoadingWebsite] = useState(true)
 
-  let loginUser = async (e: React.FormEvent<HTMLFormElement>, email: string, password: string, setIsLoading: any, setErrors: any, errors: any) => {
+  let loginUser: Function = async (e: React.FormEvent<HTMLFormElement>, email: string, password: string, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>, setErrors: React.Dispatch<React.SetStateAction<FormErrors>>, errors: FormErrors) => {
     e.preventDefault()
     setErrors({})
     setIsLoading(true)
@@ -79,7 +82,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   }
 
-  let logoutUser = () => {
+  let logoutUser: Function = () => {
     setAuthTokens(null)
     setUser(null)
     localStorage.removeItem('authTokens')
@@ -119,14 +122,24 @@ export const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  let contextData = {
-    user: user,
-    setUser: setUser,
-    authTokens: authTokens,
-    setAuthTokens,
-    loginUser: loginUser,
-    logoutUser: logoutUser
+  let logInWithTokens: Function = (data: authTokens) => {
+    console.log(data)
+    setAuthTokens(data)
+    setUser(jwtDecode(data.access))
+    localStorage.setItem('authTokens', JSON.stringify(data))
+    navigate("/")
   }
+
+
+  let contextData: AuthContextType | null = {
+    user: user,
+    authTokens: authTokens,
+    loginUser: loginUser,
+    logoutUser: logoutUser,
+    logInWithTokens: logInWithTokens
+  }
+
+  
 
   useEffect(() => {
 

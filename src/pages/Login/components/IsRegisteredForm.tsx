@@ -7,11 +7,12 @@ import { FormErrors } from '../models/forms';
 import { HandleGoBackFunction } from '../models/functions';
 import { BACK_FROM_IS_REGISTERED_FORM } from '../utils/variables'
 import { AuthContext } from '@/contexts/AuthContext';
+import { AuthContextType } from "@/models/context"
 
 type Props = {
     passwordLogin: string
     setPasswordLogin: React.Dispatch<React.SetStateAction<string>>
-    email: any
+    email: string
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
     errors: FormErrors
     isLoading: boolean
@@ -21,7 +22,7 @@ type Props = {
 
 export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
-    let {loginUser} = useContext(AuthContext)
+    let {loginUser} = useContext(AuthContext) as AuthContextType
 
     return (
 

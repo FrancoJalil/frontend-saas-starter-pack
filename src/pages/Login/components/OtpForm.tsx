@@ -10,8 +10,8 @@ import { BACK_FROM_OTP_FORM } from '../utils/variables'
 import { urlBase } from "@/utils/variables"
 
 type Props = {
-  otp: any
-  setOtp: any
+  otp: string
+  setOtp: React.Dispatch<React.SetStateAction<string>>
   email: string
   showOtpForm: boolean | null
   setShowOtpForm: React.Dispatch<React.SetStateAction<boolean | null>>

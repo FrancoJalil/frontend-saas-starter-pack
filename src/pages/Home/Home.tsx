@@ -3,10 +3,11 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useFetch } from "../../hooks/useFetch"
 import { urlBase } from "@/utils/variables"
+import { AuthContextType } from "@/models/context"
 
 export const Home = () => {
 
-    let { user, logoutUser } = useContext(AuthContext)
+    let { user, logoutUser } = useContext(AuthContext) as AuthContextType
 
     console.log(user)
 
@@ -18,7 +19,7 @@ export const Home = () => {
             <div>Home</div>
 
             {user ? (
-                <p onClick={logoutUser}>Logout</p>
+                <p onClick={() => logoutUser()}>Logout</p>
             ) : (
                 <Link to="/login">Ir a Login</Link>
             )

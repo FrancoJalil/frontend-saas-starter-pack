@@ -75,7 +75,6 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                     setIsLoading(false);
                     setShowLoginForm(false);
                     setShowOtpForm(true);
-                    console.log("ciao")
                 }
 
 

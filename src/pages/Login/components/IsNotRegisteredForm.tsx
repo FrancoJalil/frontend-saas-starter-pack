@@ -1,19 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BACK_FROM_IS_NOT_REGISTERED_FORM } from '../utils/variables';
-import { useNavigate } from "react-router-dom";
 import { urlBase } from "@/utils/variables"
 import { FormErrors } from "../models/forms"
 import { HandleGoBackFunction } from "../models/functions"
 import { AuthContext } from '@/contexts/AuthContext';
-import { jwtDecode } from 'jwt-decode';
+import { AuthContextType } from "@/models/context"
 
 type Props = {
     email: string
-    otp: any
+    otp: string
     showIsNotRegisteredForm: boolean
     passwordRegister: string
     setPasswordRegister: React.Dispatch<React.SetStateAction<string>>
@@ -26,11 +25,11 @@ type Props = {
     handleGoBack: HandleGoBackFunction
 }
 
+
+
 export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
-    let { setUser, setAuthTokens } = useContext(AuthContext)
-
-    const navigate = useNavigate()
+    const { logInWithTokens } = useContext(AuthContext) as AuthContextType
 
     const handleSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -64,27 +63,25 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passw
                 }
 
                 const data = await response.json()
-                console.log(data)
-                setAuthTokens(data)
-                setUser(jwtDecode(data.access))
-                localStorage.setItem('authTokens', JSON.stringify(data))
-                navigate("/")
+                logInWithTokens(data)
 
 
 
             } catch (error) {
                 console.error('Error:', error);
-            } finally {
-                setIsLoading(false)
-            }
+            } 
 
         }
+
+        setIsLoading(false)
 
         console.log("cargando esto")
         setErrors({ ...errors, ...newErrors });
         return Object.keys(newErrors).length === 0;
 
     }
+
+
 
     return (
         <form className="grid gap-4" onSubmit={handleSubmitRegister} style={{ display: showIsNotRegisteredForm ? 'grid' : 'none' }}>
