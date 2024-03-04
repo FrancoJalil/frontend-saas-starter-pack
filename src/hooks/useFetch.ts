@@ -3,8 +3,9 @@ import { AuthContext } from '../contexts/AuthContext'
 import { AuthContextType } from "@/models/context"
 import { FormErrors } from "@/pages/Login/models/forms"
 
+
 interface responseFetch {
-    data: JSON | null
+    data: any | null
     isLoading: boolean
     errors: FormErrors | null
 }
