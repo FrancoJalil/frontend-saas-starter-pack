@@ -90,6 +90,7 @@ export const AuthProvider = ({ children }: Props) => {
   }
 
   let updateToken = async () => {
+
     console.log("UPDATE TOKEN CALLED")
     try {
       let response = await fetch('http://localhost:8000/user/token/refresh/', {

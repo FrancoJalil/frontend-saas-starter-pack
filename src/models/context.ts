@@ -12,6 +12,7 @@ export type userJWT = {
 export type authTokens = {
     access: string
     refresh: string
+    is_new_user?: boolean
 }
 
 export interface AuthContextType {

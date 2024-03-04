@@ -1,5 +1,4 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { useContext, useEffect, useState } from "react"
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
@@ -7,8 +6,11 @@ import { urlBase } from "@/utils/variables"
 import { AuthContext } from "@/contexts/AuthContext"
 import { AuthContextType } from "@/models/context"
 import { useThemeToggle } from "@/utils/useThemeToggle"
+import axios  from "axios"
+import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 
 type Props = {}
+
 
 export const BuyTokens = (props: Props) => {
 
@@ -24,16 +26,8 @@ export const BuyTokens = (props: Props) => {
     const [sliderValue, setSliderValue] = useState<number>(defaultValue)
 
     async function createOrder() {
-
-        return await fetch(urlBase + "/paypal/create-custom-order/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": 'Bearer ' + String(authTokens?.access)
-            },
-            // use the "body" param to optionally pass additional order information
-            // like product ids and quantities
-            body: JSON.stringify({
+        try {
+            const response = await axios.post(urlBase + "/paypal/create-custom-order/", {
                 cart: [
                     {
                         id: "PROD-99T816453R899701X",
@@ -41,26 +35,31 @@ export const BuyTokens = (props: Props) => {
                         value: sliderValue
                     },
                 ],
-            }),
-        })
-            .then((response) => response.json())
-            .then((order) => order.id);
+            });
+            console.log(response)
+            return response.data.id;
+    
+        } catch (error) {
+            console.error('Se produjo un error al realizar la solicitud:', error);
+        }
     }
 
-    async function onApprove(data: any) {
-        return fetch("/my-server/capture-paypal-order", {
+    async function onApprove(data: OnApproveData) {
+        return await fetch(urlBase + "/paypal/on-success/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + String(authTokens?.access)
             },
             body: JSON.stringify({
                 orderID: data.orderID
             })
         })
             .then((response) => response.json())
-            .then((orderData) => {
-                const name = orderData.payer.name.given_name;
-                alert(`Transaction completed by ${name}`);
+            .then((data) => {
+                console.log(data)
+            }).catch((err) => {
+                console.log(err)
             });
 
     }
@@ -76,12 +75,12 @@ export const BuyTokens = (props: Props) => {
     }
 
 
-    
+
     useEffect(() => {
         // Al montar el componente, almacenar el tema anterior
         toggleTheme();
         localStorage.setItem("vite-ui-theme", theme);
-      }, []);
+    }, []);
 
     return (
 
@@ -97,9 +96,10 @@ export const BuyTokens = (props: Props) => {
                         className="w-96"
                         createOrder={createOrder}
                         onApprove={onApprove}
+                        onError={() => console.log("pepe")}
                     />
                 </div>
-                
+
             </PayPalScriptProvider>
         </div>
 

@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from '../contexts/AuthContext'
 import { AuthContextType } from "@/models/context"
+import { FormErrors } from "@/pages/Login/models/forms"
 
-type responseFetch = {
-    data: any
-    isLoading: any
-    errors: any
+interface responseFetch {
+    data: JSON | null
+    isLoading: boolean
+    errors: FormErrors | null
 }
 
 export const useFetch = (url: string, method: string, tokenRequired: boolean) => {
@@ -50,7 +51,7 @@ export const useFetch = (url: string, method: string, tokenRequired: boolean) =>
             setState({
                 data,
                 isLoading: false,
-                errors: err
+                errors: err ? err : null
             })
         }
 
