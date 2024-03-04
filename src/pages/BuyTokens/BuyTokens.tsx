@@ -36,7 +36,6 @@ export const BuyTokens = (props: Props) => {
                     },
                 ],
             });
-            console.log(response)
             return response.data.id;
     
         } catch (error) {
@@ -57,8 +56,10 @@ export const BuyTokens = (props: Props) => {
         })
             .then((response) => response.json())
             .then((data) => {
+                // retornar al usuario y mostrar un mensaje de exito!
                 console.log(data)
             }).catch((err) => {
+                // retornar modal con mensaje de error
                 console.log(err)
             });
 
@@ -96,7 +97,6 @@ export const BuyTokens = (props: Props) => {
                         className="w-96"
                         createOrder={createOrder}
                         onApprove={onApprove}
-                        onError={() => console.log("pepe")}
                     />
                 </div>
 

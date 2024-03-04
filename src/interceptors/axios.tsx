@@ -20,13 +20,11 @@ export const AxiosInterceptor = () => {
 
         axios.interceptors.response.use(
             (response) => {
-                console.log(response)
                 return response
 
             }, (error) => {
                 if (error.request.status) {
                     logoutUser()
-                    console.log("desl")
                 }
                 return Promise.reject(error)
             })

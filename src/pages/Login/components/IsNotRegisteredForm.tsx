@@ -75,7 +75,6 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passw
 
         setIsLoading(false)
 
-        console.log("cargando esto")
         setErrors({ ...errors, ...newErrors });
         return Object.keys(newErrors).length === 0;
 

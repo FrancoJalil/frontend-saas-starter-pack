@@ -25,21 +25,12 @@ import { FormErrors } from './models/forms'
 import { HandleGoBackFunction } from './models/functions'
 import { AuthContextType } from "@/models/context"
 
-import { CodeResponse, useGoogleOneTapLogin, GoogleLogin, TokenResponse, useGoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { useGoogleOneTapLogin, TokenResponse, useGoogleLogin, CredentialResponse } from '@react-oauth/google';
 
 import { urlBase } from '@/utils/variables';
 import { OTP_GOOGLE } from './utils/variables';
 import { AuthContext } from '@/contexts/AuthContext';
 
-type userInfo = {
-    access_token?: string
-    credential?: string
-    clientId?: string
-}
-
-interface credentialResponseType {
-    userInfo: userInfo
-}
 
 export const Login = () => {
 
@@ -78,12 +69,10 @@ export const Login = () => {
             });
 
             if (response.status !== 200) {
-                console.log(response)
                 throw new Error('Google auth error.')
             }
 
             const data = await response.json();
-            console.log(data)
             if (data.is_new_user === true) {
 
                 setIsRegistered(false)

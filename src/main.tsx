@@ -4,7 +4,6 @@ import App from './App.tsx'
 import './index.css'
 import { ThemeProvider } from './components/theme-provider'
 
-//AxiosInterceptor()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
