@@ -143,7 +143,7 @@ export const Login = () => {
 
 
                             </CardTitle>
-                            <ModeToggle ></ModeToggle>
+                            <ModeToggle />
                         </div>
 
 

@@ -7,7 +7,7 @@ import { PrivateRoutes } from './utils/PrivateRoutes'
 import { AuthProvider } from './contexts/AuthContext'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AxiosInterceptor } from './interceptors/axios'
-import { Navbar } from './components/Navbar'
+import { Settings } from './pages/Settings/Settings'
 
 
 function App() {
@@ -23,8 +23,9 @@ function App() {
 
               <Route element={<PrivateRoutes />}>
                 <Route element={<Home />} path="/" />
-
                 <Route element={<BuyTokens />} path="/buy-tokens" />
+                <Route element={<Settings />} path="/settings" />
+
 
               </Route>
 
