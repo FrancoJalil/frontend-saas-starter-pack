@@ -2,14 +2,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { ThemeProvider } from './components/theme-provider'
+import React from 'react'
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
-
-  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+  <React.StrictMode>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <App />
-  </ThemeProvider>
-
-
+    </ThemeProvider>
+  </React.StrictMode>
+  
 )

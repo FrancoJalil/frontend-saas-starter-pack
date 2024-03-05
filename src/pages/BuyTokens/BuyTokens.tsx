@@ -50,13 +50,13 @@ export const BuyTokens = () => {
 
         try {
             const response = await axios.post(urlBase + "/paypal/on-success/", {
-                orderIa: data.orderID,
+                orderID: data.orderID,
             });
             
             console.log(response.data)
 
             if (response.data.status === 'COMPLETED') {
-                const tokensBuyed = response.data.purchase_units[0].payments.captures[0].amount.value
+                //const tokensBuyed = response.data.purchase_units[0].payments.captures[0].amount.value
                 navigate('/')
             }
 
