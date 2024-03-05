@@ -1,20 +1,39 @@
 import { AuthContext } from '../../contexts/AuthContext'
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useFetch } from "../../hooks/useFetch"
 import { urlBase } from "@/utils/variables"
 import { AuthContextType } from "@/models/context"
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios"
+
+type data = {
+    email: string
+    tokens:number
+    
+}
 
 export const Home = () => {
 
+    const [isLoading, setIsLoading] = useState(false)
+    const [data, setData] = useState<data>()
     const navigate = useNavigate()
 
     let { user, logoutUser } = useContext(AuthContext) as AuthContextType
 
-    const { data, isLoading, errors } = useFetch(urlBase + '/user/protected-view/', 'GET', true)
+    const getData = async () => {
+        setIsLoading(true)
+        const response = await axios.get(urlBase + '/user/protected-view/')
+        setData(response.data)
+        setIsLoading(false)
+
+    }
+
+    useEffect(() => {
+        getData()
+
+    }, [])
 
     return (
         <div className="flex flex-col p-10 w-fit">
@@ -45,9 +64,9 @@ export const Home = () => {
 
             }
             <Button type="button" onClick={() => navigate('/buy-tokens')}>Buy Tokens</Button>
-            {
+            {/*
                 errors ? <p>Hubo un error al pedir la información.</p> : null
-            }
+        */}
 
         </div>
 

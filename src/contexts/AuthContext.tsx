@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { AuthContextType, userJWT, authTokens } from "@/models/context"
 import { FormErrors } from "@/pages/Login/models/forms"
 
-
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 type Props = {
@@ -15,30 +14,18 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
 
+
+
   const navigate = useNavigate()
 
   const [authTokens, setAuthTokens] = useState<authTokens | null>(() => {
-    try {
-      const storedTokens = localStorage.getItem("authTokens");
-      return storedTokens ? JSON.parse(storedTokens) : null;
-    } catch (error) {
-      console.error("Error parsing auth tokens from localStorage:", error);
-      localStorage.removeItem('authTokens')
-      navigate('/login')
-    }
+    const tokens = localStorage.getItem('authTokens');
+    return tokens ? JSON.parse(tokens) : null;
   });
 
   const [user, setUser] = useState<userJWT | null>(() => {
-    try {
-      const storedTokens = localStorage.getItem("authTokens");
-      return storedTokens ? jwtDecode(storedTokens) : null;
-    } catch (error) {
-      console.error("Error decoding user from auth tokens:", error);
-      setAuthTokens(null);
-      localStorage.removeItem('authTokens');
-      navigate('/login');
-      return null;
-    }
+    const tokens = localStorage.getItem('authTokens');
+    return tokens ? jwtDecode(tokens) : null;
   });
 
   let [loadingWebsite, setIsLoadingWebsite] = useState(true)
@@ -83,15 +70,14 @@ export const AuthProvider = ({ children }: Props) => {
   }
 
   let logoutUser: Function = () => {
+    localStorage.removeItem('authTokens')
     setAuthTokens(null)
     setUser(null)
-    localStorage.removeItem('authTokens')
     navigate('/login')
   }
 
   let updateToken = async () => {
 
-    console.log("UPDATE TOKEN CALLED")
     try {
       let response = await fetch('http://localhost:8000/user/token/refresh/', {
         method: 'POST',
@@ -123,13 +109,15 @@ export const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  let logInWithTokens: Function = (data: authTokens) => {
-    console.log(data)
+  let logInWithTokens: Function = async (data: authTokens) => {
+
+    //setErrors({})
     setAuthTokens(data)
     setUser(jwtDecode(data.access))
     localStorage.setItem('authTokens', JSON.stringify(data))
     navigate("/")
   }
+
 
 
   let contextData: AuthContextType | null = {
@@ -140,9 +128,11 @@ export const AuthProvider = ({ children }: Props) => {
     logInWithTokens: logInWithTokens
   }
 
-  
+
 
   useEffect(() => {
+
+
 
     if (loadingWebsite) {
       updateToken()
@@ -158,10 +148,10 @@ export const AuthProvider = ({ children }: Props) => {
 
   }, [authTokens, loadingWebsite])
 
-  return (
-    <AuthContext.Provider value={contextData} >
-      {loadingWebsite ? null : children}
-    </AuthContext.Provider>
-  )
+return (
+  <AuthContext.Provider value={contextData} >
+    {loadingWebsite ? null : children}
+  </AuthContext.Provider>
+)
 }
 

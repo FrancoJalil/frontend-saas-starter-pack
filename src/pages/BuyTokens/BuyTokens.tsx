@@ -1,31 +1,34 @@
 "use client"
 import { Slider } from "@/components/ui/slider"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { urlBase } from "@/utils/variables"
-import { AuthContext } from "@/contexts/AuthContext"
-import { AuthContextType } from "@/models/context"
 import { useThemeToggle } from "@/utils/useThemeToggle"
-import axios  from "axios"
+import axios from "axios"
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
+import { useNavigate } from "react-router-dom"
 
-type Props = {}
+export const BuyTokens = () => {
 
-
-export const BuyTokens = (props: Props) => {
+    const navigate = useNavigate()
 
     const { theme, toggleTheme } = useThemeToggle("light");
-    let { authTokens } = useContext(AuthContext) as AuthContextType
-    const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0); // Clave única para los botones de PayPal
-    const [isSliderChange, setIsSliderChange] = useState<boolean>(false); // Clave única para los botones de PayPal
+    const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0); 
+    const [isSliderChange, setIsSliderChange] = useState<boolean>(false); 
+    const [error, setError] = useState<string | null>(null); 
+
+    const defaultValue = 50
+    const [sliderValue, setSliderValue] = useState<number>(defaultValue)
 
     const paypalOptions = {
         clientId: "AU5Q1frZ04OBqEeE55sMjTbKMOxj0aaHKtMtsCXVlrtjEevJ5B-1uPvfG1RHJxn7z6llGCbqQniv4r4i",
     }
-    const defaultValue = 50
-    const [sliderValue, setSliderValue] = useState<number>(defaultValue)
+
+    
 
     async function createOrder() {
+        setError(null)
+
         try {
             const response = await axios.post(urlBase + "/paypal/create-custom-order/", {
                 cart: [
@@ -37,31 +40,31 @@ export const BuyTokens = (props: Props) => {
                 ],
             });
             return response.data.id;
-    
+
         } catch (error) {
             console.error('Se produjo un error al realizar la solicitud:', error);
         }
     }
 
     async function onApprove(data: OnApproveData) {
-        return await fetch(urlBase + "/paypal/on-success/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": 'Bearer ' + String(authTokens?.access)
-            },
-            body: JSON.stringify({
-                orderID: data.orderID
-            })
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                // retornar al usuario y mostrar un mensaje de exito!
-                console.log(data)
-            }).catch((err) => {
-                // retornar modal con mensaje de error
-                console.log(err)
+
+        try {
+            const response = await axios.post(urlBase + "/paypal/on-success/", {
+                orderIDa: data.orderID,
             });
+            
+            console.log(response.data)
+
+            if (response.data.status === 'COMPLETED') {
+                const tokensBuyed = response.data.purchase_units[0].payments.captures[0].amount.value
+                navigate('/')
+            }
+
+        } catch (error: any) {
+            console.log(error.response.data.error)
+            setError("Error: " + error.response.data.error)
+            console.error('Se produjo un error al realizar la solicitud:', error)
+        }
 
     }
 
@@ -101,6 +104,8 @@ export const BuyTokens = (props: Props) => {
                 </div>
 
             </PayPalScriptProvider>
+
+            {error ? <p className="text-red-500">{error}</p> : null}
         </div>
 
     )
