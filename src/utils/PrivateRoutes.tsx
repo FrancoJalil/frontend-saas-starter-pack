@@ -1,3 +1,4 @@
+import { Navbar } from '@/components/Navbar'
 import { AuthContext } from '@/contexts/AuthContext'
 import { AuthContextType } from '@/models/context'
 import { useContext } from 'react'
@@ -8,7 +9,11 @@ export const PrivateRoutes = () => {
   let { user } = useContext(AuthContext) as AuthContextType
 
   return (
-    user ? <Outlet /> : <Navigate to="/login" />
+    <>
+      <Navbar />
+
+      {user ? <Outlet /> : <Navigate to="/login" />}
+    </>
   )
 }
 

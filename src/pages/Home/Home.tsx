@@ -1,8 +1,5 @@
-import { AuthContext } from '../../contexts/AuthContext'
-import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { urlBase } from "@/utils/variables"
-import { AuthContextType } from "@/models/context"
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +17,6 @@ export const Home = () => {
     const [data, setData] = useState<data>()
     const navigate = useNavigate()
 
-    let { user, logoutUser } = useContext(AuthContext) as AuthContextType
 
     const getData = async () => {
         setIsLoading(true)
@@ -38,14 +34,7 @@ export const Home = () => {
     return (
         <div className="flex flex-col p-10 w-fit">
 
-            <div>Home</div>
-
-            {user ? (
-                <p onClick={() => logoutUser()}>Logout</p>
-            ) : (
-                <Link to="/login">Ir a Login</Link>
-            )
-            }
+            
 
             {
                 isLoading ?
@@ -56,7 +45,6 @@ export const Home = () => {
                     </>
 
             }
-            <p>Hola</p>
             <Separator className="my-4" />
 
             {

@@ -7,6 +7,7 @@ import { PrivateRoutes } from './utils/PrivateRoutes'
 import { AuthProvider } from './contexts/AuthContext'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AxiosInterceptor } from './interceptors/axios'
+import { Navbar } from './components/Navbar'
 
 
 function App() {
@@ -19,13 +20,15 @@ function App() {
           <AuthProvider>
             <AxiosInterceptor />
             <Routes>
-              <Route path='*' element={<>404 NOT FOUND</>} />
+
               <Route element={<PrivateRoutes />}>
                 <Route element={<Home />} path="/" />
 
                 <Route element={<BuyTokens />} path="/buy-tokens" />
 
               </Route>
+
+              <Route path='*' element={<>404 NOT FOUND</>} />
               <Route path='/login' element={<Login />} />
             </Routes>
           </AuthProvider>

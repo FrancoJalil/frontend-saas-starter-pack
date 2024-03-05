@@ -91,7 +91,7 @@ export const BuyTokens = () => {
         <div className="flex flex-col justify-center items-center gap-6 p-10">
             <PayPalScriptProvider options={paypalOptions} >
                 Tokens to buy: {sliderValue}
-                <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} max={100} step={1} className="w-48" />
+                <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
 
                 <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
                     <PayPalButtons
