@@ -23,3 +23,11 @@ export interface AuthContextType {
     logInWithTokens: Function
 }
 
+export interface CustomError {
+    response: {
+        data: {
+            error: string;
+        };
+    };
+}
+

@@ -4,7 +4,7 @@ import { Theme } from "@/components/theme-provider";
 
 export const useThemeToggle = (mode: Theme) => {
     const { theme, setTheme } = useTheme();
-    const [previousTheme, setPreviousTheme] = useState<any>(theme)
+    const [previousTheme, setPreviousTheme] = useState<Theme>(theme)
 
     const toggleTheme = () => {
         setPreviousTheme(theme);

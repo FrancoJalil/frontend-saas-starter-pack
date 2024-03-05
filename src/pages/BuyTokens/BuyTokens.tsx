@@ -50,7 +50,7 @@ export const BuyTokens = () => {
 
         try {
             const response = await axios.post(urlBase + "/paypal/on-success/", {
-                orderID: data.orderID,
+                orderIa: data.orderID,
             });
             
             console.log(response.data)
@@ -61,9 +61,8 @@ export const BuyTokens = () => {
             }
 
         } catch (error: any) {
-            console.log(error.response.data.error)
             setError("Error: " + error.response.data.error)
-            console.error('Se produjo un error al realizar la solicitud:', error)
+            console.error('Request error:', error)
         }
 
     }
