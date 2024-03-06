@@ -13,9 +13,10 @@ export const BuyTokens = () => {
     const navigate = useNavigate()
 
     const { theme, toggleTheme } = useThemeToggle("light");
-    const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0); 
-    const [isSliderChange, setIsSliderChange] = useState<boolean>(false); 
-    const [error, setError] = useState<string | null>(null); 
+    const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0);
+    const [isSliderChange, setIsSliderChange] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const defaultValue = 50
     const [sliderValue, setSliderValue] = useState<number>(defaultValue)
@@ -24,7 +25,7 @@ export const BuyTokens = () => {
         clientId: "AU5Q1frZ04OBqEeE55sMjTbKMOxj0aaHKtMtsCXVlrtjEevJ5B-1uPvfG1RHJxn7z6llGCbqQniv4r4i",
     }
 
-    
+
 
     async function createOrder() {
         setError(null)
@@ -52,7 +53,7 @@ export const BuyTokens = () => {
             const response = await axios.post(urlBase + "/paypal/on-success/", {
                 orderID: data.orderID,
             });
-            
+
             console.log(response.data)
 
             if (response.data.status === 'COMPLETED') {
@@ -85,24 +86,36 @@ export const BuyTokens = () => {
         localStorage.setItem("vite-ui-theme", theme);
     }, []);
 
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false); // Simulación de carga finalizada después de un retraso
+        }, 100); 
+    }, []);
+
     return (
 
         <div className="flex flex-col justify-center items-center gap-6 p-10">
+
+
             <PayPalScriptProvider options={paypalOptions} >
                 Tokens to buy: {sliderValue}
                 <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
 
-                <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
-                    <PayPalButtons
-                        disabled={isSliderChange}
-                        key={paypalButtonsKey}
-                        className="w-96"
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                    />
-                </div>
-
+                {
+                    !isLoading ?
+                        <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
+                            <PayPalButtons
+                                disabled={isSliderChange}
+                                key={paypalButtonsKey}
+                                className="w-96"
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                            />
+                        </div>
+                        : <div className="custom-loader"></div>
+                }
             </PayPalScriptProvider>
+
 
             {error ? <p className="text-red-500">{error}</p> : null}
         </div>

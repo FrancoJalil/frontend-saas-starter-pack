@@ -73,7 +73,6 @@ export const Login = () => {
             }
 
             const data = await response.json();
-            console.log(data)
             if (data.is_new_user === true) {
 
                 setIsRegistered(false)
@@ -88,7 +87,6 @@ export const Login = () => {
                 return
 
             } else {
-                console.log("aqu")
                 logInWithTokens(data)
 
             }
