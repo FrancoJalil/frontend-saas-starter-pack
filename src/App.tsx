@@ -7,8 +7,13 @@ import { PrivateRoutes } from './utils/PrivateRoutes'
 import { AuthProvider } from './contexts/AuthContext'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { AxiosInterceptor } from './interceptors/axios'
-import { Settings } from './pages/Settings/Settings'
 import { Toaster } from "@/components/ui/toaster"
+import { SettingsRoutes } from './pages/Settings/SettingsRoutes'
+import { GeneralSettings } from './pages/Settings/components/GeneralSettings'
+import { Contact } from './pages/Settings/components/Contact'
+import { ChangePassword } from './pages/Settings/components/ChangePassword'
+import { MyPurchases } from './pages/Settings/components/MyPurchases'
+import { VerifyAccount } from './pages/Settings/components/VerifyAccount'
 
 
 function App() {
@@ -26,7 +31,13 @@ function App() {
               <Route element={<PrivateRoutes />}>
                 <Route element={<Home />} path="/" />
                 <Route element={<BuyTokens />} path="/buy-tokens" />
-                <Route element={<Settings />} path="/settings" />
+                <Route element={<SettingsRoutes />} path="/settings/" >
+                  <Route element={<GeneralSettings />} path="" />
+                  <Route element={<Contact />} path="contact" />
+                  <Route element={<ChangePassword />} path="change-password" />
+                  <Route element={<MyPurchases />} path="my-purchases" />
+                  <Route element={<VerifyAccount />} path="verify" />
+                </Route>
 
 
               </Route>

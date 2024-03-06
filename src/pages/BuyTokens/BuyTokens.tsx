@@ -42,7 +42,8 @@ export const BuyTokens = () => {
             });
             return response.data.id;
 
-        } catch (error) {
+        } catch (error:any) {
+            setError(error.response.data.msg)
             console.error('Se produjo un error al realizar la solicitud:', error);
         }
     }
@@ -79,7 +80,6 @@ export const BuyTokens = () => {
     }
 
 
-
     useEffect(() => {
         // Al montar el componente, almacenar el tema anterior
         toggleTheme();
@@ -89,12 +89,13 @@ export const BuyTokens = () => {
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false); // Simulación de carga finalizada después de un retraso
-        }, 100); 
+        }, 1000);
     }, []);
 
     return (
 
         <div className="flex flex-col justify-center items-center gap-6 p-10">
+
 
 
             <PayPalScriptProvider options={paypalOptions} >

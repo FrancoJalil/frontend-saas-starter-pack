@@ -24,7 +24,6 @@ export const GeneralSettings = () => {
             <Separator className="my-4" />
 
             <Button onClick={() => logoutUser()} className="cursor-pointer font-semibold bg-rose-600 hover:bg-rose-700 text-gray-50">Logout</Button>
-
         </div>
     )
 }
