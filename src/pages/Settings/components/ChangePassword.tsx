@@ -25,22 +25,24 @@ export const ChangePassword = () => {
     const { toast } = useToast()
 
     const [otpCode, setOtpCode] = useState<string>('')
+    const [otpSent, setOtpSent] = useState<boolean | null>(null)
     const [newPassword, setNewPassword] = useState<string>('')
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>('')
     const [open, setOpen] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const sendOtp = async () => {
+        setOtpSent(false)
         try {
-            setOpen(true)
+            handleOpenDialog()
             await axios.get(urlBase + '/user/change-password/send-code/')
+            setOtpSent(true)
             return true
         } catch {
-            setOpen(false)
+            handleOpenDialog()
             return false
         }
     }
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -53,10 +55,7 @@ export const ChangePassword = () => {
             })
 
             toast({ title: "Success", description: "Password changed!", duration: 3000 })
-            setOpen(false)
-            setOtpCode('')
-            setNewPassword('')
-            setConfirmNewPassword('')
+            handleOpenDialog()
 
 
         } catch (error: any) {
@@ -67,6 +66,13 @@ export const ChangePassword = () => {
 
     }
 
+    const handleOpenDialog = () => {
+        setOpen(!open)
+        setOtpCode('')
+        setNewPassword('')
+        setConfirmNewPassword('')
+    }
+
     return (
 
         <div className="flex flex-col gap-2 items-start">
@@ -74,14 +80,14 @@ export const ChangePassword = () => {
             <h1>Password Settings</h1>
             <Separator className="my-4" />
 
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog open={open && otpSent ? open : false} onOpenChange={handleOpenDialog}>
 
                 <DialogTrigger asChild >
                     <Button
                         onClick={async () => {
-                            const sended = await sendOtp()
-                            if (sended) {
-                                toast({ title: "Email sended!", description: "Copy and paste the code.", duration: 3000 })
+                            const sent = await sendOtp()
+                            if (sent) {
+                                toast({ title: "Email sent!", description: "Copy and paste the code.", duration: 3000 })
 
                             } else {
                                 toast({ title: "Email error", description: "We could not send the OTP to your email. If the error persists, please contact us.", duration: 3000 })
@@ -89,8 +95,12 @@ export const ChangePassword = () => {
 
                         }}
                         variant="outline"
-
-                    >Change Password</Button>
+                        disabled={open}
+                        
+                    >
+                        {otpSent === false && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                        
+                        Change Password</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px]">
                     <DialogHeader>
