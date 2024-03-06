@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 
 export const GeneralSettings = () => {
 
+
     const { user, logoutUser } = useContext(AuthContext) as AuthContextType
 
     return (

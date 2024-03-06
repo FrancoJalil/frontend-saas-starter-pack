@@ -31,6 +31,7 @@ export const AxiosInterceptor = () => {
                 } else {
                     console.error("Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.");
                 }
+                console.log(error)
                 return Promise.reject(error);
             }
         );
