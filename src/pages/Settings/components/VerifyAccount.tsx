@@ -141,8 +141,8 @@ export const VerifyAccount = () => {
                         <DialogTrigger asChild >
                             <div className="flex gap-2 items-center">
                                 <PhoneInput
-                                    containerStyle={{ height: '100%' }}
-                                    inputStyle={{ height: '100%' }}
+                                    containerStyle={{ height: '100%', color: "black" }}
+                                    inputStyle={{ height: '100%', color: "black" }}
                                     country={country}
                                     value={phoneNumber}
                                     onChange={(e) => handleChangeNumber(e)}
@@ -164,7 +164,8 @@ export const VerifyAccount = () => {
                                 >
                                     {otpSent === false && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                                     Send SMS</Button>
-                                {!isValidNumber && <p>Please enter a valid 10-digit phone number.</p>}
+                                
+                                
                             </div>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[600px]">
