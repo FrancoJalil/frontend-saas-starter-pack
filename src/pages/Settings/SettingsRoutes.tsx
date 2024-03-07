@@ -16,8 +16,9 @@ export const SettingsRoutes = () => {
 
     return (
         <>
+        
 
-            <div className="flex flex-col p-10 w-fit gap-10 sm:flex-row">
+            <div className="flex flex-col p-10 w-full gap-10 sm:flex-row">
 
 
                 <nav className="flex flex-col lg:flex-col lg:space-x-0 lg:space-y-1">

@@ -34,7 +34,6 @@ export const VerifyAccount = () => {
 
 
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null)
-    const [isValidNumber, setIsValidNumber] = useState<boolean>(true)
 
     const sendOtp = async () => {
         console.log(phoneNumber)
@@ -64,6 +63,7 @@ export const VerifyAccount = () => {
 
             toast({ title: "Success", description: "Verified account!", duration: 3000 })
             handleOpenDialog()
+            window.location.reload()
 
         } catch (error: any) {
             toast({ title: "Error", description: error.response.data.msg, duration: 3000 })
@@ -84,7 +84,6 @@ export const VerifyAccount = () => {
         const input = "+" + val
 
         setPhoneNumber(input)
-        setIsValidNumber(validatePhoneNumber(input))
     }
 
     const validatePhoneNumber = (phoneNumber: string) => {
