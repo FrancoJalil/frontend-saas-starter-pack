@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 html {
   font-family: 'Inter', sans-serif;
   user-select: none;
@@ -20,7 +20,10 @@ input[type=number] {
 }
 
 
+
+
 @layer base {
+
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -67,11 +70,12 @@ input[type=number] {
   }
 }
 
- 
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -82,15 +86,19 @@ input[type=number] {
   0% {
     transform: rotate(0);
   }
+
   25% {
     transform: rotate(10deg);
   }
+
   50% {
     transform: rotate(-10deg);
   }
+
   75% {
     transform: rotate(5deg);
   }
+
   100% {
     transform: rotate(0);
   }
@@ -107,12 +115,17 @@ input[type=number] {
 
 
 .custom-loader {
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  border:8px solid;
-  border-color:#E4E4ED;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #E4E4ED;
   border-right-color: #18181b;
-  animation:s2 1s infinite linear;
+  animation: s2 1s infinite linear;
 }
-@keyframes s2 {to{transform: rotate(1turn)}}
+
+@keyframes s2 {
+  to {
+    transform: rotate(1turn)
+  }
+}

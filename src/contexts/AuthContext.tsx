@@ -148,10 +148,10 @@ export const AuthProvider = ({ children }: Props) => {
 
   }, [authTokens, loadingWebsite])
 
-return (
-  <AuthContext.Provider value={contextData} >
-    {loadingWebsite ? null : children}
-  </AuthContext.Provider>
-)
+  return (
+    <AuthContext.Provider value={contextData} >
+      {loadingWebsite ? null : children}
+    </AuthContext.Provider>
+  )
 }
 
