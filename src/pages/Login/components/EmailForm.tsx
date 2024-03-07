@@ -112,7 +112,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                 Continue with Email
             </Button>
 
-            <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
+            <a href="/" className="text-sm text-muted-foreground">Forgot password</a>
         </form>
     )
 }
