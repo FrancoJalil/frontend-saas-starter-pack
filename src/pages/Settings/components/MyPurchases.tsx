@@ -52,7 +52,7 @@ export const MyPurchases = () => {
       <TableRow key={index}>
         <TableCell>-</TableCell>
         <TableCell> yyyy-mm-dd </TableCell>
-        <TableCell> $- </TableCell>
+        <TableCell className="text-right"> $- </TableCell>
       </TableRow>
     ))
   }
@@ -62,13 +62,13 @@ export const MyPurchases = () => {
         <h1>My Purchases</h1>
         <Separator className="my-4" />
 
-        <div className="flex flex-col items-start w-full gap-5">
+        <div className="flex flex-col items-start w-full sm:w-5/6 gap-5">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Product</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Amount</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -78,7 +78,7 @@ export const MyPurchases = () => {
               <TableRow key={purchase.id}>
                 <TableCell className="font-medium">{purchase.product.name}</TableCell>
                 <TableCell>{purchase.purchased_date}</TableCell>
-                <TableCell>${purchase.price}</TableCell>
+                <TableCell className="text-right">${purchase.price}</TableCell>
               </TableRow>
             ))}
           {fillEmptyRows()}
