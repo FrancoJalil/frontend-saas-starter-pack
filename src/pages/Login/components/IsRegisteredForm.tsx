@@ -27,7 +27,6 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, setShowForgo
 
     return (
 
-
         <form className="grid gap-4" onSubmit={(e) => loginUser(e, email, passwordLogin, setIsLoading, setErrors, errors)}>
             <Label htmlFor="password">Password</Label>
             <Input

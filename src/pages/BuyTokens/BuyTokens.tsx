@@ -1,18 +1,19 @@
 "use client"
 import { Slider } from "@/components/ui/slider"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { urlBase } from "@/utils/variables"
-import { useThemeToggle } from "@/utils/useThemeToggle"
 import axios from "axios"
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { useNavigate } from "react-router-dom"
+import { ThemeProviderContext } from "@/components/theme-provider"
 
 export const BuyTokens = () => {
 
     const navigate = useNavigate()
+    const { theme, setTheme } = useContext(ThemeProviderContext)
+    const previousTheme = theme
 
-    const { theme, toggleTheme } = useThemeToggle("light");
     const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0);
     const [isSliderChange, setIsSliderChange] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -42,7 +43,7 @@ export const BuyTokens = () => {
             });
             return response.data.id;
 
-        } catch (error:any) {
+        } catch (error: any) {
             setError(error.response.data.msg)
             console.error('Se produjo un error al realizar la solicitud:', error);
         }
@@ -55,7 +56,6 @@ export const BuyTokens = () => {
                 orderID: data.orderID,
             });
 
-            console.log(response.data)
 
             if (response.data.status === 'COMPLETED') {
                 //const tokensBuyed = response.data.purchase_units[0].payments.captures[0].amount.value
@@ -81,9 +81,17 @@ export const BuyTokens = () => {
 
 
     useEffect(() => {
-        // Al montar el componente, almacenar el tema anterior
-        toggleTheme();
-        localStorage.setItem("vite-ui-theme", theme);
+        if (previousTheme === "dark") {
+            setTheme("light")
+        }
+        
+
+
+        return () => {
+            if (previousTheme === "dark") {
+                setTheme("dark")
+            }
+        }
     }, []);
 
     useEffect(() => {

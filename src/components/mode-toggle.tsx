@@ -2,7 +2,7 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
@@ -12,6 +12,11 @@ export function ModeToggle() {
     setDarkMode(!darkMode);
     setTheme(darkMode ? "light" : "dark");
   };
+
+
+  useEffect( () => {
+    setDarkMode(theme === "dark")
+  }, [theme])
 
   return (
     <div className="flex items-center justify-end">
@@ -25,3 +30,5 @@ export function ModeToggle() {
     </div>
   );
 }
+
+

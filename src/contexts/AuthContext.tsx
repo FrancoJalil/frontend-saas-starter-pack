@@ -14,8 +14,6 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
 
-
-
   const navigate = useNavigate()
 
   const [authTokens, setAuthTokens] = useState<authTokens | null>(() => {
