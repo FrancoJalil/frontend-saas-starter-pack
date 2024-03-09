@@ -3,7 +3,6 @@ import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { urlBase } from "@/utils/variables";
-import axios from "axios";
 import { useState } from "react";
 import { FormErrors } from "../models/forms";
 import { useNavigate } from "react-router-dom";

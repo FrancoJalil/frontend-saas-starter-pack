@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState, useCallback } from "react"
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import {
@@ -101,7 +101,7 @@ export const Login = () => {
     }
   }
 
-  const handleGoBack: HandleGoBackFunction = (from) => {
+  const handleGoBack = useCallback<HandleGoBackFunction>((from) => {
     if (from === BACK_FROM_IS_NOT_REGISTERED_FORM && otp !== OTP_GOOGLE) {
       setOtpVerified(null)
       setShowOtpForm(true)
@@ -127,7 +127,7 @@ export const Login = () => {
 
     }
     setErrors({})
-  }
+  }, [otp])
 
   const handleForgotPassword = () => {
     setShowForgotPasswordForm(true)
@@ -149,7 +149,7 @@ export const Login = () => {
                     src="https://res.cloudinary.com/de49grmxi/image/upload/v1704653058/logo-tweet-x_nesbfm.png"
                     alt=""
                   />
-                  <h1>Log In</h1>
+                  <h1>Authenticate</h1>
                 </div>
               </CardTitle>
               <ModeToggle />
