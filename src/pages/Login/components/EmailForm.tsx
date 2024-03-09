@@ -11,6 +11,7 @@ type Props = {
     showLoginForm: boolean
     setShowLoginForm: React.Dispatch<React.SetStateAction<boolean>>
     setShowOtpForm: React.Dispatch<React.SetStateAction<boolean | null>>
+    setShowForgotPasswordForm: React.Dispatch<React.SetStateAction<boolean | null>>
     isLoading: boolean
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
     setIsRegistered: React.Dispatch<React.SetStateAction<boolean | null>>
@@ -24,7 +25,7 @@ type responseFetchIsMailChecked = {
     email: boolean
 }
 
-export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isLoading, setIsLoading, email, setEmail, setIsRegistered, errors, setErrors }: Props) => {
+export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, setShowForgotPasswordForm, isLoading, setIsLoading, email, setEmail, setIsRegistered, errors, setErrors }: Props) => {
 
     const validateEmail = (): boolean => {
         const newErrors: { email?: string } = {};
@@ -50,7 +51,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
 
 
             try {
-                const response = await fetch(urlBase+'/user/check-email/', {
+                const response = await fetch(urlBase + '/user/check-email/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,8 +74,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                     setShowOtpForm(true);
 
                     setIsLoading(false);
-                    setShowLoginForm(false);
-                    setShowOtpForm(true);
+
                 }
 
 
@@ -112,7 +112,12 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, isL
                 Continue with Email
             </Button>
 
-            <a href="/" className="text-sm text-muted-foreground">Forgot password</a>
+            <Button type="button"
+            variant={"ghost"}
+                className={`flex justify-start gap-2 hover:bg-transparent hover:underline text-muted-foreground p-0 h-fit`}
+                onClick={() => setShowForgotPasswordForm(true)} >Forgot password</Button>
+
         </form>
     )
 }
+

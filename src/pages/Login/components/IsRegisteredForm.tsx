@@ -12,6 +12,7 @@ import { AuthContextType } from "@/models/context"
 type Props = {
     passwordLogin: string
     setPasswordLogin: React.Dispatch<React.SetStateAction<string>>
+    setShowForgotPasswordForm: React.Dispatch<React.SetStateAction<boolean | null>>
     email: string
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
     errors: FormErrors
@@ -20,7 +21,7 @@ type Props = {
     handleGoBack: HandleGoBackFunction
 }
 
-export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, setShowForgotPasswordForm, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
     let {loginUser} = useContext(AuthContext) as AuthContextType
 
@@ -47,7 +48,8 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, email, setEr
                 Log In
             </Button>
             <Button disabled={isLoading} type="button" variant="outline" onClick={() => handleGoBack(BACK_FROM_IS_REGISTERED_FORM)}>Go Back</Button>
-            <a href="/" className="italic text-sm text-muted-foreground">Forgot password?</a>
+            <a onClick={() => setShowForgotPasswordForm(true)} className="text-sm text-muted-foreground">Forgot password</a>
+            
         </form>
 
     )

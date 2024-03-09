@@ -80,8 +80,6 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passw
 
     }
 
-
-
     return (
         <form className="grid gap-4" onSubmit={handleSubmitRegister} style={{ display: showIsNotRegisteredForm ? 'grid' : 'none' }}>
             <Label htmlFor="passwordRegister">Create your password</Label>
