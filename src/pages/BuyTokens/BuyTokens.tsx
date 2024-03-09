@@ -6,7 +6,6 @@ import { urlBase } from "@/utils/variables"
 import axios from "axios"
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { useNavigate } from "react-router-dom"
-import { ThemeProvider } from "@/components/theme-provider"
 import { useThemeSwitcher } from "@/components/useThemeSwitcher"
 
 export const BuyTokens = () => {

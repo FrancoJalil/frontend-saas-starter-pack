@@ -14,7 +14,6 @@ import { ChangePassword } from './pages/Settings/components/ChangePassword'
 import { MyPurchases } from './pages/Settings/components/MyPurchases'
 import { VerifyAccount } from './pages/Settings/components/VerifyAccount'
 
-
 function App() {
 
   return (

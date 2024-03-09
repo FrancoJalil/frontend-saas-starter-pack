@@ -104,6 +104,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, set
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                required={true}
             />
 
 

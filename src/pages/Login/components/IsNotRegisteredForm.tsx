@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,10 +14,6 @@ type Props = {
     email: string
     otp: string
     showIsNotRegisteredForm: boolean
-    passwordRegister: string
-    setPasswordRegister: React.Dispatch<React.SetStateAction<string>>
-    confirmPassword: string
-    setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
     errors: FormErrors
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
     isLoading: boolean
@@ -27,10 +23,11 @@ type Props = {
 
 
 
-export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passwordRegister, setPasswordRegister, confirmPassword, setConfirmPassword, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
     const { logInWithTokens } = useContext(AuthContext) as AuthContextType
-
+    const [passwordRegister, setPasswordRegister] = useState<string>("")
+    const [confirmPassword, setConfirmPassword] = useState<string>("")
     const handleSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -94,6 +91,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passw
                 id="passwordRegister"
                 type="password"
                 placeholder="Password"
+                required={true}
             />
             <Input
                 disabled={isLoading}
@@ -105,6 +103,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, passw
                 id="confirmPassword"
                 type="password"
                 placeholder="Confirm password"
+                required={true}
             />
             {errors.confirmPassword && <div className="text-red-500 text-xs">{errors.confirmPassword}</div>}
             <Button type="submit" disabled={isLoading}>

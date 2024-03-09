@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { Icons } from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
+import { useContext, useState } from "react"
+import { Icons } from "@/components/ui/icons"
+import { Button } from "@/components/ui/button"
 import {
   BACK_FROM_IS_NOT_REGISTERED_FORM,
   BACK_FROM_OTP_FORM,
   BACK_FROM_IS_REGISTERED_FORM,
   BACK_FROM_FORGOT_PASSWORD,
-} from "./utils/variables";
+} from "./utils/variables"
 
 import {
   Card,
@@ -15,56 +15,53 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { ModeToggle } from "../../components/mode-toggle";
-import { IsRegisteredForm } from "./components/IsRegisteredForm";
-import { IsNotRegisteredForm } from "./components/IsNotRegisteredForm";
-import { EmailForm } from "./components/EmailForm";
-import { OtpForm } from "./components/OtpForm";
-import { FormErrors } from "./models/forms";
-import { HandleGoBackFunction } from "./models/functions";
-import { AuthContextType } from "@/models/context";
+} from "@/components/ui/card"
+import { ModeToggle } from "../../components/mode-toggle"
+import { IsRegisteredForm } from "./components/IsRegisteredForm"
+import { IsNotRegisteredForm } from "./components/IsNotRegisteredForm"
+import { EmailForm } from "./components/EmailForm"
+import { OtpForm } from "./components/OtpForm"
+import { FormErrors } from "./models/forms"
+import { HandleGoBackFunction } from "./models/functions"
+import { AuthContextType } from "@/models/context"
 
 import {
   useGoogleOneTapLogin,
   TokenResponse,
   useGoogleLogin,
   CredentialResponse,
-} from "@react-oauth/google";
+} from "@react-oauth/google"
 
-import { urlBase } from "@/utils/variables";
-import { OTP_GOOGLE } from "./utils/variables";
-import { AuthContext } from "@/contexts/AuthContext";
-import { ForgotPassword } from "./components/ForgotPassword";
+import { urlBase } from "@/utils/variables"
+import { OTP_GOOGLE } from "./utils/variables"
+import { AuthContext } from "@/contexts/AuthContext"
+import { ForgotPassword } from "./components/ForgotPassword"
 
 export const Login = () => {
-  let { logInWithTokens } = useContext(AuthContext) as AuthContextType;
+  let { logInWithTokens } = useContext(AuthContext) as AuthContextType
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const [email, setEmail] = useState<string>("");
-  const [passwordLogin, setPasswordLogin] = useState<string>("");
-  const [passwordRegister, setPasswordRegister] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [otp, setOtp] = useState<string>("");
-  const [otpVerified, setOtpVerified] = useState<boolean | null>(null);
-  const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null);
-  const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>("")
+  const [otp, setOtp] = useState<string>("")
+  const [otpVerified, setOtpVerified] = useState<boolean | null>(null)
+  const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null)
+  const [isRegistered, setIsRegistered] = useState<boolean | null>(null)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [showLoginForm, setShowLoginForm] = useState<boolean>(true)
   const [showIsNotRegisteredForm, setShowIsNotRegisteredForm] =
-    useState<boolean>(true);
+    useState<boolean>(true)
   const [showForgotPasswordForm, setShowForgotPasswordForm] = useState<
     boolean | null
-  >(null);
+  >(null)
 
   const googleLogin = useGoogleLogin({
     onSuccess: (credentialResponse) => handleGoogleAuth(credentialResponse),
-  });
+  })
 
   useGoogleOneTapLogin({
     onSuccess: (credentialResponse) => handleGoogleAuth(credentialResponse),
-  });
+  })
 
   const handleGoogleAuth = async (
     userCredential:
@@ -78,67 +75,64 @@ export const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userInfo: userCredential }),
-      });
+      })
 
       if (response.status !== 200) {
-        throw new Error("Google auth error.");
+        throw new Error("Google auth error.")
       }
 
-      const data = await response.json();
+      const data = await response.json()
       if (data.is_new_user === true) {
-        setIsRegistered(false);
-        setEmail(data.email);
-        setShowLoginForm(false);
-        setIsLoading(false);
-        setOtp(OTP_GOOGLE);
-        setOtpVerified(true);
-        setShowOtpForm(false);
-        setShowIsNotRegisteredForm(true);
+        setIsRegistered(false)
+        setEmail(data.email)
+        setShowLoginForm(false)
+        setIsLoading(false)
+        setOtp(OTP_GOOGLE)
+        setOtpVerified(true)
+        setShowOtpForm(false)
+        setShowIsNotRegisteredForm(true)
         // redirect to isNotRegisteredForm
-        return;
+        return
       } else {
-        logInWithTokens(data);
+        logInWithTokens(data)
       }
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
   const handleGoBack: HandleGoBackFunction = (from) => {
     if (from === BACK_FROM_IS_NOT_REGISTERED_FORM && otp !== OTP_GOOGLE) {
-      setPasswordRegister("");
-      setConfirmPassword("");
-      setOtpVerified(null);
-      setShowOtpForm(true);
+      setOtpVerified(null)
+      setShowOtpForm(true)
     } else if (
       from === BACK_FROM_IS_NOT_REGISTERED_FORM &&
       otp === OTP_GOOGLE
     ) {
-      setOtpVerified(null);
-      setOtp("");
-      setEmail("");
-      setIsRegistered(null);
-      setShowLoginForm(true);
+      setOtpVerified(null)
+      setEmail("")
+      setIsRegistered(null)
+      setShowLoginForm(true)
     } else if (from === BACK_FROM_OTP_FORM) {
-      setIsRegistered(null);
-      setShowLoginForm(true);
+      setOtp("")
+      setIsRegistered(null)
+      setShowLoginForm(true)
     } else if (from === BACK_FROM_IS_REGISTERED_FORM) {
-      setIsRegistered(null);
-      setPasswordLogin("");
-      setShowLoginForm(true);
+      setIsRegistered(null)
+      setShowLoginForm(true)
     } else if (from === BACK_FROM_FORGOT_PASSWORD) {
       setShowForgotPasswordForm(false)
-      setShowLoginForm(true);
+      setShowLoginForm(true)
       setIsRegistered(null)
 
-    } 
-    setErrors({});
-  };
+    }
+    setErrors({})
+  }
 
   const handleForgotPassword = () => {
     setShowForgotPasswordForm(true)
-    setShowLoginForm(false);
-    setIsRegistered(null);
+    setShowLoginForm(false)
+    setIsRegistered(null)
 
   }
 
@@ -207,8 +201,6 @@ export const Login = () => {
 
             {isRegistered === true ? (
               <IsRegisteredForm
-                passwordLogin={passwordLogin}
-                setPasswordLogin={setPasswordLogin}
                 setShowForgotPasswordForm={handleForgotPassword}
                 email={email}
                 isLoading={isLoading}
@@ -239,10 +231,6 @@ export const Login = () => {
                 email={email}
                 otp={otp}
                 showIsNotRegisteredForm={showIsNotRegisteredForm}
-                passwordRegister={passwordRegister}
-                setPasswordRegister={setPasswordRegister}
-                confirmPassword={confirmPassword}
-                setConfirmPassword={setConfirmPassword}
                 errors={errors}
                 setErrors={setErrors}
                 isLoading={isLoading}
@@ -262,9 +250,11 @@ export const Login = () => {
               />
             ) : null}
           </CardContent>
+
+          {/*empty now */}
           <CardFooter className="flex-col text-left items-start"></CardFooter>
         </Card>
       </div>
     </>
-  );
-};
+  )
+}

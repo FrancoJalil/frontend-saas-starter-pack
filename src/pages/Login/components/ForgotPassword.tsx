@@ -31,6 +31,7 @@ export const ForgotPassword = ({
     setIsLoading,
     handleGoBack, }: Props) => {
 
+
     const [email, setEmail] = useState("")
     const [isOtpSended, setIsOtpSended] = useState<boolean | null>(null)
 
@@ -58,7 +59,7 @@ export const ForgotPassword = ({
     useEffect( () => {
         
             toast({ title: "Enter your emaill.", description: "We will send you a code to verify your identity.", duration: 3000 })
-        
+            
             
     }, [])
 

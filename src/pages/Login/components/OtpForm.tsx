@@ -91,6 +91,7 @@ export const OtpForm = ({ otp, setOtp, setOtpVerified, email, showOtpForm, setSh
         id="otp"
         type="number"
         placeholder="Code"
+        required={true}
       />
       <Button type="submit" disabled={isLoading}>
         {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}

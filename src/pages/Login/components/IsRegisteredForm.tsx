@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,6 @@ import { AuthContext } from '@/contexts/AuthContext';
 import { AuthContextType } from "@/models/context"
 
 type Props = {
-    passwordLogin: string
-    setPasswordLogin: React.Dispatch<React.SetStateAction<string>>
     setShowForgotPasswordForm: React.Dispatch<React.SetStateAction<boolean | null>>
     email: string
     setErrors: React.Dispatch<React.SetStateAction<FormErrors>>
@@ -21,9 +19,10 @@ type Props = {
     handleGoBack: HandleGoBackFunction
 }
 
-export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, setShowForgotPasswordForm, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const IsRegisteredForm = ({  setShowForgotPasswordForm, email, setErrors, errors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
     let {loginUser} = useContext(AuthContext) as AuthContextType
+    const [passwordLogin, setPasswordLogin] = useState<string>("")
 
     return (
 
@@ -40,6 +39,7 @@ export const IsRegisteredForm = ({ passwordLogin, setPasswordLogin, setShowForgo
                 id="password"
                 type="password"
                 placeholder="Enter your password"
+                required={true}
             />
             {errors.passwordLogin && <div className="text-red-500 text-xs">{errors.passwordLogin}</div>}
             <Button type="submit" disabled={isLoading}>
