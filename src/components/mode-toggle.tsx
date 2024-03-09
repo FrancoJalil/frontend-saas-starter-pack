@@ -14,10 +14,6 @@ export function ModeToggle() {
   };
 
 
-  useEffect( () => {
-    setDarkMode(theme === "dark")
-  }, [theme])
-
   return (
     <div className="flex items-center justify-end">
 

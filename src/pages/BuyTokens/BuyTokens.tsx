@@ -1,19 +1,18 @@
 "use client"
 import { Slider } from "@/components/ui/slider"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { urlBase } from "@/utils/variables"
 import axios from "axios"
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { useNavigate } from "react-router-dom"
-import { ThemeProviderContext } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider"
+import { useThemeSwitcher } from "@/components/useThemeSwitcher"
 
 export const BuyTokens = () => {
 
+    useThemeSwitcher("light");
     const navigate = useNavigate()
-    const { theme, setTheme } = useContext(ThemeProviderContext)
-    const previousTheme = theme
-
     const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0);
     const [isSliderChange, setIsSliderChange] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -45,7 +44,7 @@ export const BuyTokens = () => {
 
         } catch (error: any) {
             setError(error.response.data.msg)
-            console.error('Se produjo un error al realizar la solicitud:', error);
+            console.error('Request error:', error);
         }
     }
 
@@ -79,56 +78,44 @@ export const BuyTokens = () => {
         setPaypalButtonsKey(prevKey => prevKey + 1)
     }
 
-
     useEffect(() => {
-        if (previousTheme === "dark") {
-            setTheme("light")
-        }
-        
-
-
-        return () => {
-            if (previousTheme === "dark") {
-                setTheme("dark")
-            }
-        }
-    }, []);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false); // Simulación de carga finalizada después de un retraso
-        }, 1000);
-    }, []);
+        const loadData = async () => {
+          // Simulación de carga asíncrona
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setIsLoading(false);
+        };
+      
+        loadData();
+      }, []);
 
     return (
 
-        <div className="flex flex-col justify-center items-center gap-6 p-10">
+            <div className="flex flex-col justify-center items-center gap-6 p-10 bg-dark">
 
 
 
-            <PayPalScriptProvider options={paypalOptions} >
-                Tokens to buy: {sliderValue}
-                <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
+                <PayPalScriptProvider options={paypalOptions} >
+                    Tokens to buy: {sliderValue}
+                    <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
 
-                {
-                    !isLoading ?
-                        <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
-                            <PayPalButtons
-                                disabled={isSliderChange}
-                                key={paypalButtonsKey}
-                                className="w-96"
-                                createOrder={createOrder}
-                                onApprove={onApprove}
-                            />
-                        </div>
-                        : <div className="custom-loader"></div>
-                }
-            </PayPalScriptProvider>
+                    {
+                        !isLoading ?
+                            <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
+                                <PayPalButtons
+                                    disabled={isSliderChange}
+                                    key={paypalButtonsKey}
+                                    className="w-96"
+                                    createOrder={createOrder}
+                                    onApprove={onApprove}
+                                />
+                            </div>
+                            : <div className="custom-loader"></div>
+                    }
+                </PayPalScriptProvider>
 
 
-            {error ? <p className="text-red-500">{error}</p> : null}
-        </div>
-
+                {error ? <p className="text-red-500">{error}</p> : null}
+            </div>
     )
 }
 
