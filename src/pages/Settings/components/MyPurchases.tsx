@@ -49,7 +49,7 @@ export const MyPurchases = () => {
   const fillEmptyRows = () => {
     const emptyRows = Math.max(5 - (userPurchases ? userPurchases.length : 0), 0);
     return Array.from({ length: emptyRows }).map((_, index) => (
-      <TableRow key={index}>
+      <TableRow key={`empty-row-${index}`}>
         <TableCell>-</TableCell>
         <TableCell> yyyy-mm-dd </TableCell>
         <TableCell className="text-right"> $- </TableCell>

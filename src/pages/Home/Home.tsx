@@ -51,6 +51,22 @@ export const Home = () => {
             <Button type="button" onClick={() => navigate('/buy-tokens')}>
                 Buy Tokens
             </Button>
+
+
+
+            {
+                userData?.verified === false ?
+                    <>
+                        <Separator className="my-4" />
+
+                        <div className='flex flex-col gap-2 items-start'>
+                            <p className='text-red-500'>Unverified Account</p>
+                            <Button onClick={() => navigate("/settings/verify")}>Verify</Button>
+                        </div>
+                    </>
+                    : null
+            }
+
         </div>
 
     )
