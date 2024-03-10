@@ -164,11 +164,8 @@ export const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-6">
-              <Button variant="outline">
-                <Icons.gitHub className="mr-2 h-4 w-4" />
-                Github
-              </Button>
+            <div className="grid">
+              
               <Button variant="outline" onClick={() => googleLogin()}>
                 <Icons.google className="mr-2 h-4 w-4" />
                 Google
