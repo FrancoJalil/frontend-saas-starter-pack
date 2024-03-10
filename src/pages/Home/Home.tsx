@@ -42,15 +42,6 @@ export const Home = () => {
                     Hello {isLoading ? <Skeleton className="h-4 w-[200px]" /> : userData?.email}
                 </h3>
 
-            <Separator className="my-4" />
-
-
-                <h4> {userData?.verified ? <p>Account Verified</p> :
-                    <div className="flex flex-col gap-2 items-start">
-                        <p>Verify your account and win 10 tokens!</p>
-                        <Button onClick={() => navigate('/settings/verify')}>Verify</Button>
-                    </div>
-                }</h4>
 
             </div>
             <Separator className="my-4" />
