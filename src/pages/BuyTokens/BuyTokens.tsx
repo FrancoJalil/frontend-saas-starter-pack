@@ -14,7 +14,6 @@ export const BuyTokens = () => {
     const navigate = useNavigate()
     const [paypalButtonsKey, setPaypalButtonsKey] = useState<number>(0);
     const [isSliderChange, setIsSliderChange] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const defaultValue = 50
@@ -27,13 +26,12 @@ export const BuyTokens = () => {
 
 
     async function createOrder() {
-        setError(null)
 
         try {
             const response = await axios.post(urlBase + "/paypal/create-custom-order/", {
                 cart: [
                     {
-                        id: "PROD-99T816453R899701X",
+                        id: "PROD-99T8164a53R899701X",
                         quantity: "1",
                         value: sliderValue
                     },
@@ -42,7 +40,6 @@ export const BuyTokens = () => {
             return response.data.id;
 
         } catch (error: any) {
-            setError(error.response.data.msg)
             console.error('Request error:', error);
         }
     }
@@ -61,7 +58,6 @@ export const BuyTokens = () => {
             }
 
         } catch (error: any) {
-            setError("Error: " + error.response.data.error)
             console.error('Request error:', error)
         }
 
@@ -113,7 +109,6 @@ export const BuyTokens = () => {
                 </PayPalScriptProvider>
 
 
-                {error ? <p className="text-red-500">{error}</p> : null}
             </div>
     )
 }
