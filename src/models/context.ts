@@ -6,7 +6,6 @@ export type userJWT = {
     jti?: string
     token_type?: "access" | "refresh"
     user_id?: number
-    verified?: number
 }
 
 export type authTokens = {

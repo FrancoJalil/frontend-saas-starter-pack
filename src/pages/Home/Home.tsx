@@ -1,19 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { urlBase } from "@/utils/variables"
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { Skeleton } from '@/components/ui/skeleton';
-import { AuthContextType } from '@/models/context';
-import { AuthContext } from '@/contexts/AuthContext';
 import { userData } from './models/responses';
 
 
 
 export const Home = () => {
-
-    const { user } = useContext(AuthContext) as AuthContextType
 
     const [isLoading, setIsLoading] = useState(false)
     const [userData, setUserData] = useState<userData>()
@@ -49,7 +45,7 @@ export const Home = () => {
             <Separator className="my-4" />
 
 
-                <h4> {user?.verified ? <p>Account Verified</p> :
+                <h4> {userData?.verified ? <p>Account Verified</p> :
                     <div className="flex flex-col gap-2 items-start">
                         <p>Verify your account and win 10 tokens!</p>
                         <Button onClick={() => navigate('/settings/verify')}>Verify</Button>
