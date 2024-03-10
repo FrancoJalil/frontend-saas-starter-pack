@@ -59,7 +59,7 @@ export const ChangePassword = () => {
 
 
         } catch (error: any) {
-            toast({ title: "Error", description: error.response.data.msg, duration: 3000 })
+            console.log(error)
         }
 
         setIsLoading(false)
@@ -89,8 +89,6 @@ export const ChangePassword = () => {
                             if (sent) {
                                 toast({ title: "Email sent!", description: "Copy and paste the code.", duration: 3000 })
 
-                            } else {
-                                toast({ title: "Email error", description: "We could not send the OTP to your email. If the error persists, please contact us.", duration: 3000 })
                             }
 
                         }}
