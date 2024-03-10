@@ -1,9 +1,13 @@
+import { useToast } from "@/components/ui/use-toast"
 import { AuthContext } from "@/contexts/AuthContext"
 import { AuthContextType } from "@/models/context"
 import axios from "axios"
 import { useContext, useEffect } from "react"
 
 export const AxiosInterceptor = () => {
+
+    const { toast } = useToast()
+
 
     const { logoutUser, authTokens } = useContext(AuthContext) as AuthContextType
     
@@ -26,10 +30,11 @@ export const AxiosInterceptor = () => {
             },
             (error) => {
                 if (error.request.status === 401) {
-                    console.error("Error de autenticación. Por favor, vuelve a iniciar sesión.");
                     logoutUser();
+                } else if (error.request.status === 429) {
+                    toast({ title: "Error", description: "Too many requests. Wait " + error.response.data.availableIn , duration: 3000 })
                 } else {
-                    console.error("Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.");
+                    toast({ title: "Error", description: error.response.data.msg, duration: 3000 })
                 }
                 console.log(error)
                 return Promise.reject(error);

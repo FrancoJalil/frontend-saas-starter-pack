@@ -35,7 +35,7 @@ export const Home = () => {
 
     return (
         <div className="flex flex-col p-10 gap-2 w-fit items-start">
-            <h2 className="text-2xl font-semibold tracking-tight">Welcome to EXAMPLE INC!</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Welcome to [EXAMPLE INC]!</h2>
 
             <div className='flex flex-col gap-2 items-start'>
                 <h3 className='flex items-center justify-center gap-2'>

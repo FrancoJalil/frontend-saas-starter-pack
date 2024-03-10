@@ -36,10 +36,9 @@ export const VerifyAccount = () => {
     const [phoneNumber, setPhoneNumber] = useState<string | null>(null)
 
     const sendOtp = async () => {
-        console.log(phoneNumber)
         setOtpSent(false)
         try {
-            handleOpenDialog()
+
             await axios.post(urlBase + '/user/send-sms-code/', {
                 user_num: phoneNumber
             })
@@ -47,10 +46,11 @@ export const VerifyAccount = () => {
             return true
         } catch (error: any) {
 
-            handleOpenDialog()
-            setOtpSent(null)
-            return error.response.data
+            setOtpSent(false)
+            //return error.response.data
         }
+
+        setOtpSent(null)
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,7 +80,6 @@ export const VerifyAccount = () => {
 
 
     const handleChangeNumber = (val: string) => {
-        console.log(val)
         const input = "+" + val
 
         setPhoneNumber(input)
@@ -114,7 +113,6 @@ export const VerifyAccount = () => {
 
             try {
                 const response = await axios.get(urlBase + "/user/get-data?fields=email,verified")
-                console.log(response)
                 setIsVerified(response.data.verified)
             } catch (error) {
                 console.error(error)
@@ -133,39 +131,37 @@ export const VerifyAccount = () => {
                 <>
                     <h1>Verify your Account</h1>
                     <Separator className="my-4" />
+                    <div className="flex gap-2 items-center">
+                        <PhoneInput
+                            containerStyle={{ height: '100%', color: "black" }}
+                            inputStyle={{ height: '100%', color: "black" }}
+                            country={country}
+                            value={phoneNumber}
+                            onChange={(e) => handleChangeNumber(e)}
+                        />
+                        <Button
+                            onClick={async () => {
+                                const response = await sendOtp()
+                                if (response === true) {
+                                    setOpen(true)
+                                    toast({ title: "SMS Sent!", description: "Copy and paste the code.", duration: 3000 })
+                                }
+
+                            }}
+                            disabled={otpSent === false}
+
+                        >
+                            {otpSent === false && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                            Send SMS</Button>
+
+
+                    </div>
 
 
                     <Dialog open={open && otpSent ? open : false} onOpenChange={handleOpenDialog}>
 
                         <DialogTrigger asChild >
-                            <div className="flex gap-2 items-center">
-                                <PhoneInput
-                                    containerStyle={{ height: '100%', color: "black" }}
-                                    inputStyle={{ height: '100%', color: "black" }}
-                                    country={country}
-                                    value={phoneNumber}
-                                    onChange={(e) => handleChangeNumber(e)}
 
-                                />
-                                <Button
-                                    onClick={async () => {
-                                        const response = await sendOtp()
-                                        if (response === true) {
-                                            toast({ title: "SMS Sent!", description: "Copy and paste the code.", duration: 3000 })
-
-                                        } else {
-                                            toast({ title: "SMS error", description: response.msg, duration: 3000 })
-                                        }
-
-                                    }}
-                                    disabled={otpSent === false}
-
-                                >
-                                    {otpSent === false && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                                    Send SMS</Button>
-                                
-                                
-                            </div>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[600px]">
                             <DialogHeader>
@@ -205,7 +201,7 @@ export const VerifyAccount = () => {
                 isVerified === true ?
                     <div className="flex items-center gap-2">
 
-                        <svg  width="34px" height="34px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="34px" height="34px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                             <g id="SVGRepo_iconCarrier">

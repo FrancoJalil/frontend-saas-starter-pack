@@ -22,7 +22,7 @@ type Props = {
 }
 
 type responseFetchIsMailChecked = {
-    email: boolean
+    email_exists: boolean
 }
 
 export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, setShowForgotPasswordForm, isLoading, setIsLoading, email, setEmail, setIsRegistered, errors, setErrors }: Props) => {
@@ -60,7 +60,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, set
                 });
 
                 const data: responseFetchIsMailChecked = await response.json();
-                const userExists: boolean = data.email
+                const userExists: boolean = data.email_exists
 
                 if (userExists === undefined) {
                     newErrors.email = 'Email is invalid'

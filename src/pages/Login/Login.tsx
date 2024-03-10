@@ -160,7 +160,7 @@ export const Login = () => {
                 ? `Hi again ${email}`
                 : isRegistered === false
                   ? `Welcome ${email}`
-                  : "Enter your email and continue to ExampleInc"}
+                  : "Enter your email and continue to [Example Inc]"}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
