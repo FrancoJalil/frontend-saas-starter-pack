@@ -18,7 +18,7 @@ export const Home = () => {
 
     const getData = async () => {
         setIsLoading(true)
-        const response = await axios.get(urlBase + '/user/protected-view/')
+        const response = await axios.get(urlBase + '/users/me/')
         setUserData(response.data)
         setIsLoading(false)
 

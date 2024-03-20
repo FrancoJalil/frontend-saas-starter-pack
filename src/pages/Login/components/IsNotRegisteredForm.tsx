@@ -42,7 +42,7 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, error
             newErrors.confirmPassword = ''
 
             try {
-                const response = await fetch(urlBase + '/user/register/', {
+                const response = await fetch(urlBase + '/users/signup/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

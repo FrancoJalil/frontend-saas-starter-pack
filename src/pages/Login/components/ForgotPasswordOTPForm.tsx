@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, setIsLoading }: Props) => {
-    
+
     const navigate = useNavigate()
     const { toast } = useToast()
 
@@ -35,37 +35,32 @@ export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, set
         const newErrors: { forgotFormOtp?: string } = {};
 
         try {
-            const response = await fetch(urlBase + '/user/forgot-password/check-code/', {
+            const response = await fetch(urlBase + '/users/passwords/resets/otp/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     email: email,
-                    code: otpCode,
+                    otp: otpCode,
                 })
             });
-            console.log("aqui")
-            console.log(response)
-            const data = await response.json()
-            console.log(data.msg)
+
             if (!response.ok) {
+                const data = await response.json()
                 throw new Error(data.msg);
             }
-            console.log("borrando")
             newErrors.forgotFormOtp = ''
             setIsOtpValid(true)
 
 
         } catch (error: any) {
             newErrors.forgotFormOtp = error.message
-            console.log(error.message)
             setIsOtpValid(null)
             console.error('Error:', error);
         }
         setErrors({ ...errors, ...newErrors });
         setIsLoading(false)
-        console.log("aqui")
         return Object.keys(newErrors).length === 0;
 
     }
@@ -74,7 +69,6 @@ export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, set
         e.preventDefault()
         setIsLoading(true)
         const newErrors: { forgotFormPassword?: string } = {};
-        console.log("aqui")
 
         if (newPassword !== confirmPassword) {
             newErrors.forgotFormPassword = "Passwords don't match"
@@ -84,21 +78,18 @@ export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, set
             newErrors.forgotFormPassword = ''
 
             try {
-                const response = await fetch(urlBase + '/user/forgot-password/change/', {
+                const response = await fetch(urlBase + '/users/passwords/resets/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        code: otpCode,
+                        otp: otpCode,
                         email: email,
                         new_password: newPassword
                     })
                 });
-                console.log("aqui")
-                console.log(response)
                 const data = await response.json()
-                console.log(data.msg)
                 if (!response.ok) {
                     throw new Error(data.msg);
                 }
@@ -116,7 +107,6 @@ export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, set
 
         setErrors({ ...errors, ...newErrors });
         setIsLoading(false)
-        console.log("aqui")
         return Object.keys(newErrors).length === 0;
     }
 

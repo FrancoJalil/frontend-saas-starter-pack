@@ -51,7 +51,7 @@ export const EmailForm = ({ showLoginForm, setShowLoginForm, setShowOtpForm, set
 
 
             try {
-                const response = await fetch(urlBase + '/user/check-email/', {
+                const response = await fetch(urlBase + '/users/auth/email/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

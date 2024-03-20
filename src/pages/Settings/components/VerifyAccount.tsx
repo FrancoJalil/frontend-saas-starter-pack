@@ -39,8 +39,10 @@ export const VerifyAccount = () => {
         setOtpSent(false)
         try {
 
-            await axios.post(urlBase + '/user/send-sms-code/', {
-                user_num: phoneNumber
+            await axios.get(urlBase + '/users/verifications/otp/sms/', {
+                params: {
+                    user_num: phoneNumber
+                }
             })
             setOtpSent(true)
             return true
@@ -57,7 +59,7 @@ export const VerifyAccount = () => {
         e.preventDefault()
         setIsLoading(true)
         try {
-            await axios.post(urlBase + '/user/otp-verification/', {
+            await axios.post(urlBase + '/users/verifications/otp/sms/', {
                 otp_code: otpCode,
             })
 
@@ -112,7 +114,7 @@ export const VerifyAccount = () => {
         const fetchUserData = async () => {
 
             try {
-                const response = await axios.get(urlBase + "/user/get-data?fields=email,verified")
+                const response = await axios.get(urlBase + "/users/me?fields=email,verified")
                 setIsVerified(response.data.verified)
             } catch (error) {
                 console.error(error)

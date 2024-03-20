@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import { AuthContextType, userJWT, authTokens } from "@/models/context"
 import { FormErrors } from "@/pages/Login/models/forms"
+import { urlBase } from '@/utils/variables';
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }: Props) => {
 
 
     try {
-      let response = await fetch('http://localhost:8000/user/token/', {
+      let response = await fetch(urlBase + '/users/auth/credentials/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

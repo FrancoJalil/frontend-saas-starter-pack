@@ -33,7 +33,7 @@ export const OtpForm = ({ otp, setOtp, setOtpVerified, email, showOtpForm, setSh
     const newErrors: { otp?: string } = {};
 
     try {
-      const response = await fetch(urlBase+'/user/check-code/', {
+      const response = await fetch(urlBase + '/users/signup/otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,17 +44,12 @@ export const OtpForm = ({ otp, setOtp, setOtpVerified, email, showOtpForm, setSh
         }),
       });
 
-      const data = await response.json()
+      //const data = await response.json()
+      
       setOtp(otp.trim())
       if (!response.ok) {
         newErrors.otp = 'Error'
         throw new Error('Invalid response');
-      }
-
-      if (!data.checked) {
-        newErrors.otp = 'Invalid OTP'
-        throw new Error('Invalid otp');
-
       }
 
 
