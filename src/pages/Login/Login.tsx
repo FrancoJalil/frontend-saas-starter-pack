@@ -33,7 +33,6 @@ import {
 } from "@react-oauth/google"
 
 import { urlBase } from "@/utils/variables"
-import { OTP_GOOGLE } from "./utils/variables"
 import { AuthContext } from "@/contexts/AuthContext"
 import { ForgotPassword } from "./components/ForgotPassword"
 
@@ -70,7 +69,6 @@ export const Login = () => {
       | CredentialResponse
   ) => {
     try {
-      console.log(userCredential)
       const response = await fetch(urlBase + "/users/auth/google/", {
         method: "POST",
         headers: {
@@ -99,14 +97,14 @@ export const Login = () => {
   }
 
   const handleGoBack = useCallback<HandleGoBackFunction>((from) => {
-    if (from === BACK_FROM_IS_NOT_REGISTERED_FORM && otp !== OTP_GOOGLE) {
+    if (from === BACK_FROM_IS_NOT_REGISTERED_FORM && !googleCredentials) {
       setOtpVerified(null)
       setShowOtpForm(true)
     } else if (
-      from === BACK_FROM_IS_NOT_REGISTERED_FORM &&
-      googleCredentials
+      from === BACK_FROM_IS_NOT_REGISTERED_FORM && googleCredentials
     ) {
       setGoogleCredentials(null)
+      setOtp("")
       setOtpVerified(null)
       setEmail("")
       setIsRegistered(null)

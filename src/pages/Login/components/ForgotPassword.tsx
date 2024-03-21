@@ -40,83 +40,89 @@ export const ForgotPassword = ({
         setIsLoading(true)
         const newErrors: { forgot?: string } = {};
         try {
-            const url = `${urlBase}/users/passwords/resets/otp/?email=${encodeURIComponent(email)}`;
-            await fetch(url, {
+            const url = `${urlBase}/users/passwords/resets/otp/?email=${email}`;
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
 
-            setIsOtpSended(true)
-            } catch (error: any) {
-                newErrors.forgot = error.response.data.msg
+            if (!response.ok) {
+                const data = await response.json()
+                throw new Error(data.msg);
             }
 
-            setErrors({ ...errors, ...newErrors });
+            setIsOtpSended(true)
+        } catch (error: any) {
             setIsLoading(false)
-            return Object.keys(newErrors).length === 0;
+            newErrors.forgot = error.message
         }
+
+        setErrors({ ...errors, ...newErrors });
+        setIsLoading(false)
+        return Object.keys(newErrors).length === 0;
+    }
 
     const { toast } = useToast()
 
-        useEffect(() => {
+    useEffect(() => {
 
-            toast({ title: "Enter your emaill.", description: "We will send you a code to verify your identity.", duration: 3000 })
+        toast({ title: "Enter your emaill.", description: "We will send you a code to verify your identity.", duration: 3000 })
 
 
-        }, [])
+    }, [])
 
-        return (
-            <>
+    return (
+        <>
 
-                {
-                    isOtpSended === null ?
-                        <form className="grid gap-4" onSubmit={(e) => handleSubmit(e)}>
-                            <Label className="flex justify-between" htmlFor="email">Email
-                                {errors.forgot && <div className="text-red-500 text-xs">{errors.forgot}</div>}
-                            </Label>
+            {
+                isOtpSended === null ?
+                    <form className="grid gap-4" onSubmit={(e) => handleSubmit(e)}>
+                        <Label className="flex justify-between" htmlFor="email">Email
+                            {errors.forgot && <div className="text-red-500 text-xs">{errors.forgot}</div>}
+                        </Label>
 
-                            <Input
-                                disabled={isLoading}
-                                autoCapitalize="none"
-                                autoComplete="off"
-                                autoCorrect="off"
-                                autoFocus={true}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="m@example.com"
-                                required={true}
-                            />
-                            <Button type="submit" disabled={isLoading}>
-                                {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                                Send code
-                            </Button>
-                        </form>
+                        <Input
+                            disabled={isLoading}
+                            autoCapitalize="none"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoFocus={true}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="m@example.com"
+                            required={true}
+                        />
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                            Send code
+                        </Button>
+                    </form>
+                    :
+                    isOtpSended === true ?
+                        <ForgotPasswordOTPForm
+                            email={email}
+                            errors={errors}
+                            setErrors={setErrors}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading} />
                         :
-                        isOtpSended === true ?
-                            <ForgotPasswordOTPForm
-                                email={email}
-                                errors={errors}
-                                setErrors={setErrors}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading} />
-                            :
-                            null
-                }
+                        null
+            }
 
 
-                <Button
-                    disabled={isLoading}
-                    type="button"
-                    variant="outline"
-                    onClick={() => handleGoBack(BACK_FROM_FORGOT_PASSWORD)}
-                >
-                    Go Back
-                </Button>
-            </>
-        );
-    };
+            <Button
+                disabled={isLoading}
+                type="button"
+                variant="outline"
+                onClick={() => handleGoBack(BACK_FROM_FORGOT_PASSWORD)}
+            >
+                Go Back
+            </Button>
+        </>
+    );
+};

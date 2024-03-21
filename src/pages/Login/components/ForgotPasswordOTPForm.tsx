@@ -131,7 +131,7 @@ export const ForgotPasswordOTPForm = ({ email, errors, setErrors, isLoading, set
                             id="otpCode"
                             name="otpCode"
                             type="number"
-                            placeholder="Enther the code"
+                            placeholder="Enter the code"
                             required={true}
 
                         />
