@@ -28,10 +28,10 @@ export const BuyTokens = () => {
     async function createOrder() {
 
         try {
-            const response = await axios.post(urlBase + "/paypal/create-custom-order/", {
+            const response = await axios.post(urlBase + "/paypal/orders/", {
                 cart: [
                     {
-                        id: "PROD-99T8164a53R899701X",
+                        id: "PROD-2RX69027783287129",
                         quantity: "1",
                         value: sliderValue
                     },
@@ -47,15 +47,12 @@ export const BuyTokens = () => {
     async function onApprove(data: OnApproveData) {
 
         try {
-            const response = await axios.post(urlBase + "/paypal/on-success/", {
+            await axios.post(urlBase + "/paypal/orders/capture/", {
                 orderID: data.orderID,
             });
 
+            navigate('/')
 
-            if (response.data.status === 'COMPLETED') {
-                //const tokensBuyed = response.data.purchase_units[0].payments.captures[0].amount.value
-                navigate('/')
-            }
 
         } catch (error: any) {
             console.error('Request error:', error)
@@ -75,41 +72,41 @@ export const BuyTokens = () => {
 
     useEffect(() => {
         const loadData = async () => {
-          // Simulación de carga asíncrona
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setIsLoading(false);
+            // Simulación de carga asíncrona
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setIsLoading(false);
         };
-      
+
         loadData();
-      }, []);
+    }, []);
 
     return (
 
-            <div className="flex flex-col justify-center items-center gap-6 p-10 bg-dark">
+        <div className="flex flex-col justify-center items-center gap-6 p-10 bg-dark">
 
 
 
-                <PayPalScriptProvider options={paypalOptions} >
-                    Tokens to buy: {sliderValue}
-                    <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
+            <PayPalScriptProvider options={paypalOptions} >
+                Tokens to buy: {sliderValue}
+                <Slider onPointerUp={() => handleSliderChange()} onPointerDown={() => handleSliderChange()} onValueChange={(e) => handleSliderValueChange(Number(e))} defaultValue={[sliderValue]} min={1} max={100} step={1} className="w-48" />
 
-                    {
-                        !isLoading ?
-                            <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
-                                <PayPalButtons
-                                    disabled={isSliderChange}
-                                    key={paypalButtonsKey}
-                                    className="w-96"
-                                    createOrder={createOrder}
-                                    onApprove={onApprove}
-                                />
-                            </div>
-                            : <div className="custom-loader"></div>
-                    }
-                </PayPalScriptProvider>
+                {
+                    !isLoading ?
+                        <div style={{ opacity: isSliderChange ? '0.5' : '1' }}>
+                            <PayPalButtons
+                                disabled={isSliderChange}
+                                key={paypalButtonsKey}
+                                className="w-96"
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                            />
+                        </div>
+                        : <div className="custom-loader"></div>
+                }
+            </PayPalScriptProvider>
 
 
-            </div>
+        </div>
     )
 }
 
