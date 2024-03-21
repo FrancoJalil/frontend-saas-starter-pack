@@ -43,6 +43,7 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [email, setEmail] = useState<string>("")
+  const [googleCredentials, setGoogleCredentials] = useState<string | null>(null)
   const [otp, setOtp] = useState<string>("")
   const [otpVerified, setOtpVerified] = useState<boolean | null>(null)
   const [showOtpForm, setShowOtpForm] = useState<boolean | null>(null)
@@ -69,25 +70,21 @@ export const Login = () => {
       | CredentialResponse
   ) => {
     try {
-      const response = await fetch(urlBase + "/user/auth/google/", {
+      console.log(userCredential)
+      const response = await fetch(urlBase + "/users/auth/google/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userInfo: userCredential }),
       })
-
-      if (response.status !== 200) {
-        throw new Error("Google auth error.")
-      }
-
       const data = await response.json()
       if (data.is_new_user === true) {
         setIsRegistered(false)
         setEmail(data.email)
         setShowLoginForm(false)
         setIsLoading(false)
-        setOtp(OTP_GOOGLE)
+        setGoogleCredentials(data.google_token)
         setOtpVerified(true)
         setShowOtpForm(false)
         setShowIsNotRegisteredForm(true)
@@ -107,8 +104,9 @@ export const Login = () => {
       setShowOtpForm(true)
     } else if (
       from === BACK_FROM_IS_NOT_REGISTERED_FORM &&
-      otp === OTP_GOOGLE
+      googleCredentials
     ) {
+      setGoogleCredentials(null)
       setOtpVerified(null)
       setEmail("")
       setIsRegistered(null)
@@ -226,6 +224,7 @@ export const Login = () => {
             {otpVerified === true ? (
               <IsNotRegisteredForm
                 email={email}
+                googleCredentials={googleCredentials}
                 otp={otp}
                 showIsNotRegisteredForm={showIsNotRegisteredForm}
                 errors={errors}

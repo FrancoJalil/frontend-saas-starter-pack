@@ -12,6 +12,7 @@ import { AuthContextType } from "@/models/context"
 
 type Props = {
     email: string
+    googleCredentials: any
     otp: string
     showIsNotRegisteredForm: boolean
     errors: FormErrors
@@ -23,7 +24,7 @@ type Props = {
 
 
 
-export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
+export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, googleCredentials, otp, errors, setErrors, isLoading, setIsLoading, handleGoBack }: Props) => {
 
     const { logInWithTokens } = useContext(AuthContext) as AuthContextType
     const [passwordRegister, setPasswordRegister] = useState<string>("")
@@ -42,6 +43,9 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, error
             newErrors.confirmPassword = ''
 
             try {
+                console.log(otp)
+                console.log(passwordRegister)
+                console.log(email)
                 const response = await fetch(urlBase + '/users/signup/', {
                     method: 'POST',
                     headers: {
@@ -50,7 +54,10 @@ export const IsNotRegisteredForm = ({ showIsNotRegisteredForm, email, otp, error
                     body: JSON.stringify({
                         email: email,
                         password: passwordRegister,
-                        otp: otp
+                        register_type: googleCredentials ? "google" : "email", 
+                        otp: otp,
+                        google_credential: googleCredentials
+
                     }),
                 });
 
