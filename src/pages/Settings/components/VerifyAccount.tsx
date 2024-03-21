@@ -60,7 +60,8 @@ export const VerifyAccount = () => {
         setIsLoading(true)
         try {
             await axios.post(urlBase + '/users/verifications/otp/sms/', {
-                otp_code: otpCode,
+                user_num: phoneNumber,
+                otp: otpCode,
             })
 
             toast({ title: "Success", description: "Verified account!", duration: 3000 })

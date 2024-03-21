@@ -28,7 +28,7 @@ export const MyPurchases = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(urlBase + "/paypal/get-user-purchases/", {
+      const response = await axios.get(urlBase + "/paypal/purchases/", {
         params: {
           page: currentPage
         }
