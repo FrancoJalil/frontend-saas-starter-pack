@@ -13,16 +13,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
+import { AuthContext } from "@/contexts/AuthContext"
+import { AuthContextType } from "@/models/context"
 import { urlBase } from "@/utils/variables"
-import axios from "axios"
 
-import { useState } from "react"
+import { useContext, useState } from "react"
 
 
 
 export const ChangePassword = () => {
 
     const { toast } = useToast()
+
+    const { user } = useContext(AuthContext) as AuthContextType
 
     const [otpCode, setOtpCode] = useState<string>('')
     const [otpSent, setOtpSent] = useState<boolean | null>(null)
@@ -35,7 +38,18 @@ export const ChangePassword = () => {
         setOtpSent(false)
         try {
             handleOpenDialog()
-            await axios.get(urlBase + '/user/change-password/send-code/')
+            const url = `${urlBase}/users/passwords/resets/otp/?email=${user && user.email}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            if (!response.ok) {
+                const data = await response.json()
+                throw new Error(data.msg);
+            }
+            
             setOtpSent(true)
             return true
         } catch {
@@ -47,23 +61,42 @@ export const ChangePassword = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
-        try {
-            await axios.post(urlBase + '/user/change-password/', {
-                code: otpCode,
-                new_password: newPassword,
-                confirm_new_password: confirmNewPassword
-            })
+        if (newPassword !== confirmNewPassword) {
+            toast({ title: "Error", description: "Passwords do not match.", duration: 3000 })
 
-            toast({ title: "Success", description: "Password changed!", duration: 3000 })
-            handleOpenDialog()
+        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(newPassword)) {
+            toast({ title: "Error", description: "Password must be at least 8 characters long and contain at least one letter and one number.", duration: 3000 })
+        } else {
+
+            try {
+                const response = await fetch(urlBase + '/users/passwords/resets/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user && user.email,
+                        otp: otpCode,
+                        new_password: newPassword,
+                    })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json()
+                    throw new Error(data.msg);
+                }
+
+                toast({ title: "Success", description: "Password changed!", duration: 3000 })
+                handleOpenDialog()
 
 
-        } catch (error: any) {
-            console.log(error)
+            } catch (error: any) {
+                toast({ title: "Error", description: error.message, duration: 3000 })
+            }
+
+
         }
-
         setIsLoading(false)
-
     }
 
     const handleOpenDialog = () => {
@@ -94,10 +127,10 @@ export const ChangePassword = () => {
                         }}
                         variant="outline"
                         disabled={open}
-                        
+
                     >
                         {otpSent === false && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                        
+
                         Change Password</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px]">
@@ -119,6 +152,8 @@ export const ChangePassword = () => {
                                     name="otpCode"
                                     placeholder="654321"
                                     className="col-span-3"
+                                    required={true}
+
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -132,6 +167,7 @@ export const ChangePassword = () => {
                                     type="password"
                                     placeholder="********"
                                     className="col-span-3"
+                                    required={true}
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -145,6 +181,8 @@ export const ChangePassword = () => {
                                     type="password"
                                     placeholder="********"
                                     className="col-span-3"
+                                    required={true}
+
                                 />
                             </div>
                         </div>

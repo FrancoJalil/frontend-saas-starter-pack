@@ -10,7 +10,6 @@ import {
 } from "../utils/variables";
 import { ForgotPasswordOTPForm } from "./ForgotPasswordOTPForm";
 import { urlBase } from "@/utils/variables";
-import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
 type Props = {

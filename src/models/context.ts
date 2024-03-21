@@ -1,6 +1,6 @@
 
 export type userJWT = {
-    email?: string
+    email: string
     exp?: number
     iat?: number
     jti?: string

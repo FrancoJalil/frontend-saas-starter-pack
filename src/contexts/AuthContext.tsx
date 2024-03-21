@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: Props) => {
   let updateToken = async () => {
 
     try {
-      let response = await fetch('http://localhost:8000/user/token/refresh/', {
+      let response = await fetch(urlBase + '/users/auth/token/refresh/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
