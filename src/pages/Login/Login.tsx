@@ -12,7 +12,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -245,8 +244,7 @@ export const Login = () => {
             ) : null}
           </CardContent>
 
-          {/*empty now */}
-          <CardFooter className="flex-col text-left items-start"></CardFooter>
+          
         </Card>
       </div>
     </>

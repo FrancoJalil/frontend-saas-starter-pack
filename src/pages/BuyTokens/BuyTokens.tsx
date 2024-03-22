@@ -8,6 +8,9 @@ import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { useNavigate } from "react-router-dom"
 import { useThemeSwitcher } from "@/components/useThemeSwitcher"
 
+const PAYPAL_CLIENT_ID = import.meta.env.PAYPAL_CLIENT_ID
+const PAYPAL_PRODUCT_ID = import.meta.env.PAYPAL_PRODUCT_ID
+
 export const BuyTokens = () => {
 
     useThemeSwitcher("light");
@@ -20,7 +23,7 @@ export const BuyTokens = () => {
     const [sliderValue, setSliderValue] = useState<number>(defaultValue)
 
     const paypalOptions = {
-        clientId: "AU5Q1frZ04OBqEeE55sMjTbKMOxj0aaHKtMtsCXVlrtjEevJ5B-1uPvfG1RHJxn7z6llGCbqQniv4r4i",
+        clientId: PAYPAL_CLIENT_ID,
     }
 
 
@@ -31,7 +34,7 @@ export const BuyTokens = () => {
         const response = await axios.post(urlBase + "/paypal/orders/", {
             cart: [
                 {
-                    id: "PROD-2RX69027783287129",
+                    id: PAYPAL_PRODUCT_ID,
                     quantity: "1",
                     value: sliderValue
                 },
