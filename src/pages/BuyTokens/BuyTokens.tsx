@@ -72,7 +72,6 @@ export const BuyTokens = () => {
 
     useEffect(() => {
         const loadData = async () => {
-            // Simulación de carga asíncrona
             await new Promise(resolve => setTimeout(resolve, 1000));
             setIsLoading(false);
         };
