@@ -47,9 +47,7 @@ export const VerifyAccount = () => {
             setOtpSent(true)
             return true
         } catch (error: any) {
-
             setOtpSent(false)
-            //return error.response.data
         }
 
         setOtpSent(null)
@@ -58,19 +56,17 @@ export const VerifyAccount = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
-        try {
-            await axios.post(urlBase + '/users/verifications/otp/sms/', {
-                user_num: phoneNumber,
-                otp: otpCode,
-            })
 
-            toast({ title: "Success", description: "Verified account!", duration: 3000 })
-            handleOpenDialog()
-            window.location.reload()
+        await axios.post(urlBase + '/users/verifications/otp/sms/', {
+            user_num: phoneNumber,
+            otp: otpCode,
+        })
 
-        } catch (error: any) {
-            toast({ title: "Error", description: error.response.data.msg, duration: 3000 })
-        }
+        toast({ title: "Success", description: "Verified account!", duration: 3000 })
+        handleOpenDialog()
+        window.location.reload()
+
+
 
         setIsLoading(false)
 
@@ -114,12 +110,10 @@ export const VerifyAccount = () => {
     useEffect(() => {
         const fetchUserData = async () => {
 
-            try {
-                const response = await axios.get(urlBase + "/users/me?fields=email,verified")
-                setIsVerified(response.data.verified)
-            } catch (error) {
-                console.error(error)
-            }
+
+            const response = await axios.get(urlBase + "/users/me?fields=email,verified")
+            setIsVerified(response.data.verified)
+
         }
 
         fetchUserData()

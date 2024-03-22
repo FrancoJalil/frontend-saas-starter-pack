@@ -27,18 +27,14 @@ export const MyPurchases = () => {
   const [totalPages, setTotalPages] = useState(1)
 
   const getData = async () => {
-    try {
-      const response = await axios.get(urlBase + "/paypal/purchases/", {
-        params: {
-          page: currentPage
-        }
-      })
-      setUserPurchases(response.data.results.user_purchases)
-      setTotalPages(response.data.results.total_pages)
 
-    } catch (error) {
-      console.log(error)
-    }
+    const response = await axios.get(urlBase + "/paypal/purchases/", {
+      params: {
+        page: currentPage
+      }
+    })
+    setUserPurchases(response.data.results.user_purchases)
+    setTotalPages(response.data.results.total_pages)
 
   }
 
@@ -57,44 +53,44 @@ export const MyPurchases = () => {
     ))
   }
 
-    return (
-      <div className="w-full">
-        <h1>My Purchases</h1>
-        <Separator className="my-4" />
+  return (
+    <div className="w-full">
+      <h1>My Purchases</h1>
+      <Separator className="my-4" />
 
-        <div className="flex flex-col items-start w-full sm:w-5/6 gap-5">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Product</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+      <div className="flex flex-col items-start w-full sm:w-5/6 gap-5">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Product</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
 
             {userPurchases &&
-            userPurchases.map((purchase: Purchase) => (
-              <TableRow key={purchase.id}>
-                <TableCell className="font-medium">{purchase.product.name}</TableCell>
-                <TableCell>{purchase.purchased_date}</TableCell>
-                <TableCell className="text-right">${purchase.price}</TableCell>
-              </TableRow>
-            ))}
-          {fillEmptyRows()}
+              userPurchases.map((purchase: Purchase) => (
+                <TableRow key={purchase.id}>
+                  <TableCell className="font-medium">{purchase.product.name}</TableCell>
+                  <TableCell>{purchase.purchased_date}</TableCell>
+                  <TableCell className="text-right">${purchase.price}</TableCell>
+                </TableRow>
+              ))}
+            {fillEmptyRows()}
 
 
-            </TableBody>
+          </TableBody>
 
-          </Table>
+        </Table>
 
-          <div className="flex justify-end gap-4">
-            <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Previous</Button>
-            <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>Next</Button>
-          </div>
+        <div className="flex justify-end gap-4">
+          <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>Previous</Button>
+          <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>Next</Button>
         </div>
-
-
       </div>
-    )
-  }
+
+
+    </div>
+  )
+}

@@ -27,36 +27,31 @@ export const BuyTokens = () => {
 
     async function createOrder() {
 
-        try {
-            const response = await axios.post(urlBase + "/paypal/orders/", {
-                cart: [
-                    {
-                        id: "PROD-2RX69027783287129",
-                        quantity: "1",
-                        value: sliderValue
-                    },
-                ],
-            });
-            return response.data.id;
 
-        } catch (error: any) {
-            console.error('Request error:', error);
-        }
+        const response = await axios.post(urlBase + "/paypal/orders/", {
+            cart: [
+                {
+                    id: "PROD-2RX69027783287129",
+                    quantity: "1",
+                    value: sliderValue
+                },
+            ],
+        });
+        return response.data.id;
+
+
     }
 
     async function onApprove(data: OnApproveData) {
 
-        try {
-            await axios.post(urlBase + "/paypal/orders/capture/", {
-                orderID: data.orderID,
-            });
 
-            navigate('/')
+        await axios.post(urlBase + "/paypal/orders/capture/", {
+            orderID: data.orderID,
+        });
+
+        navigate('/')
 
 
-        } catch (error: any) {
-            console.error('Request error:', error)
-        }
 
     }
 

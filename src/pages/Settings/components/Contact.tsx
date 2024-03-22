@@ -22,19 +22,17 @@ export const Contact = () => {
         setIsLoading(true)
         e.preventDefault()
 
-        try {
-            await axios.post(urlBase + "/users/contact/", {
-                subject,
-                msg: message
-            })
-            toast({ title: "Success", description: "Email received. We'll reply soon.", duration: 3000 })
-            
-            setSubject('');
-            setMessage('');
 
-        } catch (error: any) {
-            toast({ title: "Error", description: error.response.data.msg, duration: 3000 })
-        }
+        await axios.post(urlBase + "/users/contact/", {
+            subject,
+            msg: message
+        })
+        toast({ title: "Success", description: "Email received. We'll reply soon.", duration: 3000 })
+
+        setSubject('');
+        setMessage('');
+
+
 
         setIsLoading(false)
 
