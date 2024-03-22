@@ -14,11 +14,14 @@ import { ChangePassword } from './pages/Settings/components/ChangePassword'
 import { MyPurchases } from './pages/Settings/components/MyPurchases'
 import { VerifyAccount } from './pages/Settings/components/VerifyAccount'
 
+const VITE_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+
 function App() {
 
   return (
     <>
-      <GoogleOAuthProvider clientId="393246352399-e6manv1gvibqlnpba7lsu0s9ob0patgt.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={VITE_GOOGLE_CLIENT_ID}>
         <Toaster />
 
         <BrowserRouter>
